@@ -55,7 +55,10 @@ Este repositório foi criado para:
 │       ├── IN_OUT_PA.mat
 │       ├── script.py
 │       └── terminal-out.txt
-└── README.md
+├── README.md
+└── requirements.txt
+
+6 directories, 17 files
 ```
 
 ---
