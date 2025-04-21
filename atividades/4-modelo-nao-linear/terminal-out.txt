@@ -1,32 +1,36 @@
-P: 2, M: 1  
-initial_estimated:  [-0.49552488  0.90037182  2.1489864   1.04919312] 
+P: 2, M: 2  
+initial_estimated:  [ 0.03956512 -1.12546416 -0.16866626  0.54326827  0.17542069  1.16308882] 
 
    Iteration     Total nfev        Cost      Cost reduction    Step norm     Optimality   
-       0              1         4.5478e+01                                    4.26e+01    
-       1              2         8.9972e-02      4.54e+01       2.60e+00       1.97e-01    
-       2              3         8.9624e-03      8.10e-02       1.53e+00       6.91e-09    
+       0              1         8.8186e+00                                    1.75e+01    
+       1              2         7.1149e-02      8.75e+00       1.72e+00       2.12e-01    
+       2              3         7.3936e-03      6.38e-02       6.41e-01       7.57e-09    
 `gtol` termination condition is satisfied.
-Function evaluations 3, initial cost 4.5478e+01, final cost 8.9624e-03, first-order optimality 6.91e-09.
+Function evaluations 3, initial cost 8.8186e+00, final cost 7.3936e-03, first-order optimality 7.57e-09.
 
 Resultado da otimização:      message: `gtol` termination condition is satisfied.
      success: True
       status: 1
-         fun: [-5.977e-02 -2.062e-02 ... -8.311e-04 -9.170e-03]
-           x: [ 1.125e+00 -1.305e-01 -6.905e-01  2.870e-01]
-        cost: 0.008962369480212931
-         jac: [[ 6.230e-01 -0.000e+00  3.882e-01  0.000e+00]
-               [ 6.060e-01  6.230e-01  3.673e-01  3.882e-01]
+         fun: [-5.134e-02 -1.936e-02 ... -4.310e-03 -1.069e-02]
+           x: [ 1.042e+00  7.044e-02 -1.403e-01 -5.360e-01 -4.930e-02
+                2.169e-01]
+        cost: 0.00739357593547192
+         jac: [[ 6.230e-01  0.000e+00 ... -0.000e+00  0.000e+00]
+               [ 6.060e-01  6.230e-01 ...  3.882e-01  0.000e+00]
                ...
-               [ 2.299e-01  3.080e-01  5.286e-02  9.489e-02]
-               [ 1.118e-01  2.299e-01  1.249e-02  5.286e-02]]
-        grad: [-3.665e-09  2.921e-10  1.018e-09  6.907e-09]
-  optimality: 6.907098406519919e-09
- active_mask: [ 0.000e+00  0.000e+00  0.000e+00  0.000e+00]
+               [ 2.299e-01  3.080e-01 ...  9.489e-02  1.154e-01]
+               [ 1.118e-01  2.299e-01 ...  5.286e-02  9.489e-02]]
+        grad: [ 5.542e-09  5.678e-09  6.022e-09  6.677e-09  7.566e-09
+                7.321e-09]
+  optimality: 7.566143857924354e-09
+ active_mask: [ 0.000e+00  0.000e+00  0.000e+00  0.000e+00  0.000e+00
+                0.000e+00]
         nfev: 3
         njev: 3
 
-Coeficientes resultantes: a = [ 1.12463318 -0.13050208 -0.69045676  0.28702603]
+Coeficientes resultantes: a = [ 1.04191353  0.07044324 -0.14025714 -0.5359626  -0.04929621  0.21692085]
 
-Erro médio: 0.002151728575812998 
-Erro máximo em módulo: 0.05976860434707931 
-Erro mínimo em módulo: 1.8167406064251157e-05
+Erro médio: 0.001460211776094783 
+Erro máximo em módulo: 0.051336683866823885 
+Erro mínimo em módulo: 4.552780532568468e-05
+0.051336683866823885
