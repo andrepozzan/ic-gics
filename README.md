@@ -82,7 +82,7 @@ Clone este repositório e acesse a pasta desejada:
 ```bash
 git clone https://github.com/seu-usuario/ic-gics.git
 cd ic-gics/atividades/4-modelo-nao-linear
-python3 main.py
+python3 script.py
 ```
 
 ---
