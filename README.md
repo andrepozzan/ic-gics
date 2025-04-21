@@ -33,17 +33,29 @@ Este repositório foi criado para:
 ## 🗂 Estrutura do Repositório
 
 ```text
-/
-├── atividades/
-│   └── 4-modelo-nao-linear/     # Códigos e análises da Atividade 4
-│
-├── assets/
-│   ├── gics-logo.png            # Logo original do GICS
-│   ├── gics-branco.png          # Logo branca do GICS (usada no cabeçalho)
-│   └── logo-ufpr.svg            # Logo institucional da UFPR
-│
-├── requirements.txt             # Bibliotecas Python necessárias
-└── README.md                    # Este arquivo
+.
+├── assets
+│   ├── gics-branco.png
+│   ├── gics-logo.png
+│   └── logo-ufpr.svg
+├── atividades
+│   ├── 1-minimos-quadrados
+│   │   ├── mmq-tabela.py
+│   │   ├── mmq-tabela-saida.csv
+│   │   ├── mmq-tabela-saida.txt
+│   │   └── script.py
+│   ├── 2-in-out-amplificador
+│   │   ├── IN_OUT_PA.mat
+│   │   └── script.py
+│   ├── 3-modelo-mp
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── matriz.txt
+│   │   └── script.py
+│   └── 4-modelo-nao-linear
+│       ├── IN_OUT_PA.mat
+│       ├── script.py
+│       └── terminal-out.txt
+└── README.md
 ```
 
 ---
