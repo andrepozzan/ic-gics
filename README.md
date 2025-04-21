@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="./assets/gics-logo.png" alt="GICS Logo" width="200" />
+  <img src="./assets/gics-branco.png" alt="GICS Logo Branca" width="180" height="100" />
+  <img src="./assets/logo-ufpr.svg" alt="UFPR Logo" width="220" height="100"/>
+  <img src="./assets/gics-logo.png" alt="GICS Logo Branca" width="180" height="100"/>
 </p>
 
 # 📂 Repositório de Códigos da Iniciação Científica (GICS)
@@ -8,20 +10,17 @@
 
 ---
 
-## 📑 Sumário
-
-- [📖 Sobre](#-sobre)
-- [🗂 Estrutura do Repositório](#-estrutura-do-repositório)
-- [⚙️ Requisitos](#️-requisitos)
-- [🚀 Instalação & Uso](#-instalação--uso)
-- [📄 Relatórios Vinculados](#-relatórios-vinculados)
-- [🔗 Referências Técnicas](#-referências-técnicas)
-- [👤 Autor](#-autor)
-- [⚖️ Licença](#️-licença)
-
----
-
 ## 📖 Sobre
+
+O **GICS** (Grupo de Concepção de Circuitos e Sistemas Integrados), vinculado à UFPR, tem como objetivo atuar na pesquisa e desenvolvimento de circuitos e sistemas integrados de **radiofrequência (RF)**, **analógicos**, **mistos** e **digitais**, contribuindo para o avanço científico da área e para a formação de recursos humanos altamente especializados.
+
+Composto por professores com experiência internacional, o GICS desenvolve atividades nas seguintes áreas da **microeletrônica**:
+
+- Projetos de circuitos integrados RF e analógicos
+- Sistemas digitais e mistos
+- Processamento de sinais
+- Sistemas embarcados
+- Identificação de sistemas não lineares
 
 Este repositório foi criado para:
 
@@ -35,24 +34,62 @@ Este repositório foi criado para:
 
 ```text
 /
-├── Atividade_1_IC_GICS/        # Ajuste de reta por Mínimos Quadrados
-│   ├── main.py                 # Exemplo de uso
-│   ├── least_squares.py        # Implementação em Python (NumPy + Matplotlib)
-│   └── report_figures/         # Gráficos comparativos
-│
-├── Atividade_2_IC_GICS/        # Modelagem via série de Volterra (amplificador)
-│   ├── main.py
-│   ├── volterra.py             # Geração da matriz de regressão
-│   └── figures/
-│
-├── Atividade_3_IC_GICS/
-│   ├── main.py                 # Modelo MP com sinais complexos
-│   ├── memory_polynomial.py    # Cálculo de coeficientes (np.linalg.lstsq)
-│   └── figures/                # AM‑AM scatter plots, NMSE
+├── atividades/
+│   └── 4-modelo-nao-linear/     # Códigos e análises da Atividade 4
 │
 ├── assets/
-│   └── gics_logo.png           # Logo do GICS (utilizado neste README)
+│   ├── gics-logo.png            # Logo original do GICS
+│   ├── gics-branco.png          # Logo branca do GICS (usada no cabeçalho)
+│   └── logo-ufpr.svg            # Logo institucional da UFPR
 │
-├── requirements.txt            # Bibliotecas Python
-└── README.md                   # Este arquivo
+├── requirements.txt             # Bibliotecas Python necessárias
+└── README.md                    # Este arquivo
 ```
+
+---
+
+## ⚙️ Requisitos
+
+Para rodar os scripts Python, é recomendado ter o ambiente virtual com os seguintes pacotes:
+
+```bash
+pip install -r requirements.txt
+```
+
+Certifique-se também de ter o **MATLAB** instalado para scripts `.m`, caso aplicável.
+
+---
+
+## 🚀 Instalação & Uso
+
+Clone este repositório e acesse a pasta desejada:
+
+```bash
+git clone https://github.com/seu-usuario/ic-gics.git
+cd ic-gics/atividades/4-modelo-nao-linear
+python3 main.py
+```
+
+---
+
+## 📄 Relatórios Vinculados
+
+- 📘 Relatório Atividade 1 - Ajuste Linear via Mínimos Quadrados
+- 📗 Relatório Atividade 2 - Série de Volterra em Amplificadores
+- 📙 Relatório Atividade 3 - Modelo MP com sinais complexos
+- 📕 Relatório Atividade 4 - Modelos Não Lineares com Memória
+
+---
+
+## 🔗 Referências Técnicas
+
+- Documentações: `NumPy`, `Matplotlib`, `SciPy`, `Simulink`
+
+---
+
+## 👤 Autor
+
+Desenvolvido por **André Corso Pozzan**  
+Discente de Engenharia Elétrica - UFPR
+
+---
