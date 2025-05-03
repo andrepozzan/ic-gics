@@ -14,13 +14,13 @@ out_validation = loaded_data['out_validation']
 #Definições dos parâmetros do modelo
 # P - Ordem do polinômio
 # M - Profundidade de memória
-P, M = 3, 2
+P, M = 5, 3
 
 # Coeficientes iniciais complexos (ex: aleatórios)
 
-initial_complex = np.zeros(P*(M+1)) + 1j * np.zeros(P*(M+1))
+# initial_complex = np.zeros(P*(M+1)) + 1j * np.zeros(P*(M+1))
 # initial_complex = np.ones(P*(M+1)) + 1j * np.ones(P*(M+1))
-# initial_complex = np.random.randn(P*(M+1)) + 1j * np.random.randn(P*(M+1))
+initial_complex = np.random.randn(P*(M+1)) + 1j * np.random.randn(P*(M+1))
 
 # Vetor real concatenando parte real e imaginária
 initial_real = np.concatenate((initial_complex.real, initial_complex.imag))
@@ -62,7 +62,7 @@ def mpResiduals(x_real, x_data, y_data, P, M):
     return np.concatenate((resid.real, resid.imag))
 
 def calcCoefByLeastSquares(in_data, out_data):
-    result = least_squares(mpResiduals, initial_real, args=(in_data.ravel(), out_data.ravel(), P, M),verbose=1)
+    result = least_squares(mpResiduals, initial_real, args=(in_data.ravel(), out_data.ravel(), P, M),verbose=2)
     final_coef = unpackComplexCoefficients(result.x, P, M)
     
     print("\nResultado da otimização:", final_coef)

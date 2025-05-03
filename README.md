@@ -51,14 +51,21 @@ Este repositório foi criado para:
 │   │   ├── in_out_SBRT2_direto.mat
 │   │   ├── matriz.txt
 │   │   └── script.py
-│   └── 4-modelo-nao-linear
-│       ├── IN_OUT_PA.mat
-│       ├── script.py
+│   ├── 4-modelo-nao-linear
+│   │   ├── 3D-model.py
+│   │   ├── IN_OUT_PA.mat
+│   │   ├── script.py
+│   │   └── terminal-out.txt
+│   └── 5-modelo-nao-linear-complexo
+│       ├── 3D-model.py
+│       ├── in_out_SBRT2_direto.mat
+│       ├── script-3.py
+│       ├── script-5.py
 │       └── terminal-out.txt
 ├── README.md
 └── requirements.txt
 
-6 directories, 17 files
+7 directories, 23 files
 ```
 
 ---
@@ -93,6 +100,7 @@ python3 script.py
 - 📗 Relatório Atividade 2 - Série de Volterra em Amplificadores
 - 📙 Relatório Atividade 3 - Modelo MP com sinais complexos
 - 📕 Relatório Atividade 4 - Modelos Não Lineares com Memória
+- 📘 Relatório Atividade 4 - Modelos Não Lineares com Memória e Números complexos
 
 ---
 

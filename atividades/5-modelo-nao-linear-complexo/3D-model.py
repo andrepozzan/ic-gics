@@ -65,7 +65,7 @@ def calcMethodByPandM(P, M):
 
 
 def runParallelEvaluation(P_MAX, M_MAX):
-    params = [(p, m) for p in range(1, P_MAX+1) for m in range(1, M_MAX+1)]
+    params = [(p, m) for p in range(2, P_MAX+1) for m in range(1, M_MAX+1)]
     results = []
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(calcMethodByPandM, p, m) for p, m in params]
@@ -77,15 +77,17 @@ def runParallelEvaluation(P_MAX, M_MAX):
         executor.shutdown(wait=True)
     return results
 
-P_MAX, M_MAX = 5, 3
+P_MAX, M_MAX = 10, 5
 results = runParallelEvaluation(P_MAX, M_MAX)
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 cmap = cm.viridis
+
 for idx, (p, m, err) in enumerate(results):
     color = cmap(idx / len(results))
     ax.scatter(p, m, err, c=[color], marker='o', s=30)
+
 ax.set_xlabel('P')
 ax.set_ylabel('M')
 ax.set_zlabel('Max Error')
