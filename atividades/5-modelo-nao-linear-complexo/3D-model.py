@@ -68,12 +68,16 @@ def runParallelEvaluation(P_MAX, M_MAX):
     params = [(p, m) for p in range(1, P_MAX+1) for m in range(1, M_MAX+1)]
     results = []
     with ProcessPoolExecutor() as executor:
-        futures = {executor.submit(calcMethodByPandM, p, m): (p, m) for p, m in params}
-        for future in tqdm(as_completed(futures), total=len(futures), desc="Progresso P×M"):
-            results.append(future.result())
+        futures = [executor.submit(calcMethodByPandM, p, m) for p, m in params]
+        with tqdm(total=len(futures), desc="Progresso P×M") as pbar:
+            for future in futures:
+                results.append(future.result())
+                pbar.update(1)
+                
+        executor.shutdown(wait=True)
     return results
 
-P_MAX, M_MAX = 10, 5
+P_MAX, M_MAX = 5, 3
 results = runParallelEvaluation(P_MAX, M_MAX)
 
 fig = plt.figure()
