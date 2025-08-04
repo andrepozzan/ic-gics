@@ -56,16 +56,16 @@ Este repositório foi criado para:
 │   │   ├── IN_OUT_PA.mat
 │   │   ├── script.py
 │   │   └── terminal-out.txt
-│   └── 5-modelo-nao-linear-complexo
-│       ├── 3D-model.py
-│       ├── in_out_SBRT2_direto.mat
-│       ├── script-3.py
-│       ├── script-5.py
-│       └── terminal-out.txt
+│   ├── 5-modelo-nao-linear-complexo
+│   │   ├── 3D-model.py
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── script-3.py
+│   │   ├── script-5.py
+│   │   └── terminal-out.txt
+│   └── 6-luts-interpolacao-linear
+│       └── scripty.py
 ├── README.md
 └── requirements.txt
-
-7 directories, 23 files
 ```
 
 ---
@@ -87,7 +87,7 @@ Certifique-se também de ter o **MATLAB** instalado para scripts `.m`, caso apli
 Clone este repositório e acesse a pasta desejada:
 
 ```bash
-git clone https://github.com/seu-usuario/ic-gics.git
+git clone https://github.com/andrepozzan/ic-gics.git
 cd ic-gics/atividades/4-modelo-nao-linear
 python3 script.py
 ```
@@ -99,8 +99,9 @@ python3 script.py
 - 📘 Relatório Atividade 1 - Ajuste Linear via Mínimos Quadrados
 - 📗 Relatório Atividade 2 - Série de Volterra em Amplificadores
 - 📙 Relatório Atividade 3 - Modelo MP com sinais complexos
-- 📕 Relatório Atividade 4 - Modelos Não Lineares com Memória
-- 📘 Relatório Atividade 4 - Modelos Não Lineares com Memória e Números complexos
+- 📕 Relatório Atividade 4 - Modelo Matemático com Otimização Não Linear
+- 📘 Relatório Atividade 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
+- 📗 Relatório Atividade 6 - Modelo Matemático com Otimização Não Linear, Números Complexos e Funções LUTs
 
 ---
 
