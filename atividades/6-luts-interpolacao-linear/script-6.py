@@ -28,6 +28,7 @@ initial_real = np.concatenate((initial_complex.real, initial_complex.imag))
 print(f"P: {P}, M: {M}  \ninitial_estimated: ", np.array(initial_real), "\n")
 
 def estimatedValueWithComplex(x_data, coef_matrix, P, M):
+    amplitude_entrada = np.abs(x_data[dataIndex])
     y_est = []
 
     for n in range(len(x_data)):
@@ -88,7 +89,6 @@ def checkError(vector_error, in_data, out_data, out_estimated_data):
     print("Erro máximo em módulo:", max_abs_error)
     print("Erro mínimo em módulo:", min_abs_error)
     
-    # Índices dos maiores e menores erros em módulo
     max_idx = np.argmax(np.abs(vector_error))
     min_idx = np.argmin(np.abs(vector_error))
 
@@ -124,6 +124,9 @@ out_estimated = estimatedValueWithComplex(in_validation.ravel(), coef, P, M)
 vector_error = calcVectorError(out_estimated, out_validation)
 
 max_error_point_original, max_error_point_estimated, min_error_point_original, min_error_point_estimated = checkError(vector_error, in_validation, out_validation, out_estimated)
+
+
+# Exibição
 
 plotErrorPair(max_error_point_original, max_error_point_estimated, color='green', label_base='Erro Máximo')
 plotErrorPair(min_error_point_original, min_error_point_estimated, color='red', label_base='Erro Mínimo')
