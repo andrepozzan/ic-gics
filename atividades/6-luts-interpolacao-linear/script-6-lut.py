@@ -71,7 +71,7 @@ def calculate_nmse(out_validation, saida_estimada):
     nmse = 10 * np.log10(np.sum(np.abs(erro)**2) / np.sum(np.abs(out_validation)**2))
     return nmse
 
-print("Lut in length:", len(lut_in), "\nTraining len data:",len(in_training),"x", len(out_training))
+print("Tamanho dos dados de treinamento:",len(in_training),"x", len(out_training))
 
 optimized_coef = calcCoef(in_training, out_training, n_in_points)
 
