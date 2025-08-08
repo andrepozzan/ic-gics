@@ -103,7 +103,7 @@ python3 script.py
 - 📙 Relatório Atividade 3 - Modelo MP com sinais complexos
 - 📕 Relatório Atividade 4 - Modelo Matemático com Otimização Não Linear
 - 📘 Relatório Atividade 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
-- 📗 Relatório Atividade 6 - Modelo Matemático com Otimização Não Linear, Números Complexos e Funções LUTs
+- 📗 Relatório Atividade 6 - Método de Otimização para Sistemas Complexos Usando Lookup Tables e Interpolação Linear
 
 ---
 
