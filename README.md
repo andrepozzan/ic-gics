@@ -75,10 +75,11 @@ Este repositório foi criado para:
 Para rodar os scripts Python, é recomendado ter o ambiente virtual com os seguintes pacotes:
 
 ```bash
+sudo apt update
+sudo apt install python3-pip -y
+
 pip install -r requirements.txt
 ```
-
-Certifique-se também de ter o **MATLAB** instalado para scripts `.m`, caso aplicável.
 
 ---
 
