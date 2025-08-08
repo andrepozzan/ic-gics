@@ -63,7 +63,8 @@ Este repositório foi criado para:
 │   │   ├── script-5.py
 │   │   └── terminal-out.txt
 │   └── 6-luts-interpolacao-linear
-│       └── scripty.py
+│       ├── in_out_SBRT2_direto.mat
+│       └── script-6-lut.py
 ├── README.md
 └── requirements.txt
 ```
