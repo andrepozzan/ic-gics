@@ -107,12 +107,6 @@ python3 script.py
 
 ---
 
-## 🔗 Referências Técnicas
-
-- Documentações: `NumPy`, `Matplotlib`, `SciPy`, `Simulink`
-
----
-
 ## 👤 Autor
 
 Desenvolvido por **André Corso Pozzan**  
