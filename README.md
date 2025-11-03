@@ -35,9 +35,11 @@ Este repositório foi criado para:
 ```text
 .
 ├── assets
+│   ├── ativ7.png
 │   ├── gics-branco.png
 │   ├── gics-logo.png
-│   └── logo-ufpr.svg
+│   ├── logo-ufpr.svg
+│   └── semicro.png
 ├── atividades
 │   ├── 1-minimos-quadrados
 │   │   ├── mmq-tabela.py
@@ -72,9 +74,18 @@ Este repositório foi criado para:
 │       ├── script-7-lut.py
 │       └── terminal-out.txt
 ├── README.md
+├── relatorios
+│   ├── artigo-semicro2025-andrepozzan.pdf
+│   ├── Atividade_1_IC_GICS.pdf
+│   ├── Atividade_2_IC_GICS.pdf
+│   ├── Atividade_3_IC_GICS.pdf
+│   ├── Atividade_4_IC_GICS-andrepozzan.pdf
+│   ├── Atividade_5_IC_GICS-andrepozzan.pdf
+│   ├── Atividade_6_IC_GICS-andrepozzan.pdf
+│   └── Atividade_7_IC_GICS-andrepozzan.pdf
 └── requirements.txt
 
-9 directories, 30 files
+10 directories, 40 files
 ```
 
 ---
@@ -121,6 +132,8 @@ Tamanho Variável
 ---
 
 ## Publicação SeMicro-PR
+
+Acesse: <a href="https://jpm.ufpr.br/">https://jpm.ufpr.br/</a>
 
 O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozzan.pdf"
 
