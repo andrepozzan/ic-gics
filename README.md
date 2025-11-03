@@ -62,11 +62,19 @@ Este repositório foi criado para:
 │   │   ├── script-3.py
 │   │   ├── script-5.py
 │   │   └── terminal-out.txt
-│   └── 6-luts-interpolacao-linear
+│   ├── 6-luts-interpolacao-linear
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── script-6-lut.py
+│   │   └── terminal-out.txt
+│   └── 7-luts-tamanho-variavel
 │       ├── in_out_SBRT2_direto.mat
-│       └── script-6-lut.py
+│       ├── script-7-heatmap.py
+│       ├── script-7-lut.py
+│       └── terminal-out.txt
 ├── README.md
 └── requirements.txt
+
+9 directories, 30 files
 ```
 
 ---
@@ -98,14 +106,25 @@ python3 script.py
 
 ## 📄 Relatórios Vinculados
 
-- 📘 Relatório Atividade 1 - Ajuste Linear via Mínimos Quadrados
-- 📗 Relatório Atividade 2 - Série de Volterra em Amplificadores
-- 📙 Relatório Atividade 3 - Modelo MP com sinais complexos
-- 📕 Relatório Atividade 4 - Modelo Matemático com Otimização Não Linear
-- 📘 Relatório Atividade 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
-- 📗 Relatório Atividade 6 - Método de Otimização para Sistemas Complexos Usando Lookup Tables e Interpolação Linear
+Cada atividade possui um relatório de entrega, disponíveis para consulta na pasta "relatorios", a seguir segue uma pequena descrição contendo número e titulo de cada um.
+
+- 📘 1 - Ajuste Linear via Mínimos Quadrados
+- 📗 2 - Série de Volterra em Amplificadores
+- 📙 3 - Modelo MP com sinais complexos
+- 📕 4 - Modelo Matemático com Otimização Não Linear
+- 📘 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
+- 📗 6 - Método de Otimização para Sistemas Complexos Usando Lookup Tables e Interpolação Linear
+- 📙 7 - Método de Otimização para Sistemas
+Complexos Usando Lookup Tables de
+Tamanho Variável
 
 ---
+
+### Último relatório realizado:
+
+<p align="center">
+  <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="100%" 
+</p>
 
 ## 👤 Autor
 
