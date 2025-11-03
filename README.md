@@ -120,10 +120,18 @@ Tamanho Variável
 
 ---
 
+## Publicação SeMicro-PR
+
+O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozzan.pdf"
+
+<p align="center">
+  <img src="./assets/semicro.png" alt="GICS Logo Branca" width="500px" 
+</p>
+
 ### Último relatório realizado:
 
 <p align="center">
-  <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="100%" 
+  <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="500px" 
 </p>
 
 ## 👤 Autor
