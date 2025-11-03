@@ -12,8 +12,8 @@ out_validation = mat['out_validation'].flatten()
 
 
 # Parâmetros para varrer
-n_in_points_list = list(range(20, 121, 20))  # Exemplo: 20, 40, ..., 120
-LUTS_SIZE_list = list(range(1, 11))         # 1 a 10
+n_in_points_list = list(range(5, 125, 5))  # Exemplo: 20, 40, ..., 120
+LUTS_SIZE_list = list(range(2, 10))         # 1 a 10
 
 # Matriz para armazenar NMSE
 nmse_matrix = np.zeros((len(n_in_points_list), len(LUTS_SIZE_list)))
@@ -83,7 +83,8 @@ last_out_estimated = out_estimated
 
 # --- Heatmap 2D ---
 plt.figure(figsize=(10, 6))
-im = plt.imshow(nmse_matrix, aspect='auto', cmap='viridis',
+# Usar colormap 'plasma' para maior contraste
+im = plt.imshow(nmse_matrix, aspect='auto', cmap='plasma',
                origin='lower',
                extent=[min(LUTS_SIZE_list)-0.5, max(LUTS_SIZE_list)+0.5, min(n_in_points_list)-0.5, max(n_in_points_list)+0.5])
 plt.colorbar(im, label='NMSE (dB)')
@@ -92,11 +93,20 @@ plt.xticks(LUTS_SIZE_list)
 plt.xlabel('LUTS_SIZE', fontsize=16)
 plt.ylabel('n_in_points', fontsize=16)
 plt.title('Heatmap NMSE vs LUTS_SIZE e n_in_points', fontsize=18)
-# Adiciona valores no heatmap
+# Adiciona valores no heatmap com cor adaptativa para contraste
+import matplotlib
+colormap = plt.get_cmap('plasma')
 for i in range(len(n_in_points_list)):
     for j in range(len(LUTS_SIZE_list)):
-        plt.text(LUTS_SIZE_list[j], n_in_points_list[i], f"{nmse_matrix[i, j]:.2f}",
-                 ha='center', va='center', color='white', fontsize=10)
+        val = nmse_matrix[i, j]
+        # Obtém cor RGBA do pixel
+        norm_val = (val - nmse_matrix.min()) / (nmse_matrix.max() - nmse_matrix.min() + 1e-12)
+        rgba = colormap(norm_val)
+        # Calcula luminância para decidir cor do texto
+        luminance = 0.299 * rgba[0] + 0.587 * rgba[1] + 0.114 * rgba[2]
+        text_color = 'black' if luminance > 0.5 else 'white'
+        plt.text(LUTS_SIZE_list[j], n_in_points_list[i], f"{val:.2f}",
+                 ha='center', va='center', color=text_color, fontsize=10, fontweight='bold')
 plt.tight_layout()
 plt.show()
 
