@@ -14,7 +14,7 @@ out_validation = loaded_data['out_validation']
 #Definições dos parâmetros do modelo
 # P - Ordem do polinômio
 # M - Profundidade de memória
-P, M = 5, 3
+P, M = 10, 5
 
 # Coeficientes iniciais complexos (ex: aleatórios)
 

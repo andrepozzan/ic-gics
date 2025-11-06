@@ -126,8 +126,8 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
 - 📘 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
 - 📗 6 - Método de Otimização para Sistemas Complexos Usando Lookup Tables e Interpolação Linear
 - 📙 7 - Método de Otimização para Sistemas
-Complexos Usando Lookup Tables de
-Tamanho Variável
+  Complexos Usando Lookup Tables de
+  Tamanho Variável
 
 ---
 
@@ -138,8 +138,12 @@ Acesse: <a href="https://jpm.ufpr.br/">https://jpm.ufpr.br/</a>
 O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozzan.pdf"
 
 <p align="center">
-  <img src="./assets/semicro.png" alt="GICS Logo Branca" width="500px" 
+  <img src="./assets/semicro.png" alt="Artigo SeMicro" width="500px" 
 </p>
+<p align="center">
+  <img src="./assets/slides-semicro.png" alt="Slides SeMicro" width="500px" 
+</p>
+
 
 ### Último relatório realizado:
 
