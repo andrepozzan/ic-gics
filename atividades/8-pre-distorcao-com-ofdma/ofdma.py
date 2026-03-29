@@ -15,8 +15,9 @@ def generate_OFDMA_signal(Nfft, number_of_users, subcarriers_per_user, modulatio
         end = start + subcarriers_per_user
 
         # Generate random user bits and map them to QAM symbols.
-        bits = ''.join(np.random.choice(['0','1'], int(np.log2(modulation_order))*subcarriers_per_user))
-        # bits = "0000000100100011";
+        # bits = ''.join(np.random.choice(['0','1'], int(np.log2(modulation_order))*subcarriers_per_user))
+        bits = "0000 0001 0010 0011 0100";
+        bits = bits.replace(" ", "")
         
         symbols = qam_mod(bits, modulation_order)
         print("USER", user, "BITS:", bits)
@@ -33,7 +34,7 @@ def generate_OFDMA_signal(Nfft, number_of_users, subcarriers_per_user, modulatio
     return band_ifft, all_original_bits
 
 def extract_bits_from_ofdma(received_signal, Nfft, number_of_users, subcarriers_per_user, modulation_order):
-    recovered_band = np.fft.fft(received_signal) / np.sqrt(Nfft) # Ajuste de escala comum em OFDM
+    recovered_band = np.fft.fft(received_signal) / np.sqrt(Nfft) # Common OFDM scaling adjustment
     
     
     all_recovered_bits = []
@@ -42,7 +43,7 @@ def extract_bits_from_ofdma(received_signal, Nfft, number_of_users, subcarriers_
         end = start + subcarriers_per_user
         user_symbols = recovered_band[start:end]
         
-        # 3. Demodula
+        # 3. Demodulate
         user_bits = qam_demod(user_symbols, modulation_order)
         all_recovered_bits.append(user_bits)
         
