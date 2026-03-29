@@ -19,13 +19,14 @@ def qam_mod(bits, modulation_order):
     levels = np.arange(n_levels)
     gray_levels = binary_to_gray(levels)
     
-    mapping_i = np.zeros(n_levels)
+    
     qam_levels = 2 * np.arange(n_levels) - (n_levels - 1)
+    
+    mapping_i = np.zeros(n_levels)
+    mapping_q = np.zeros(n_levels)
+    
     for i, g in enumerate(gray_levels):
         mapping_i[g] = qam_levels[i]
-
-    mapping_q = np.zeros(n_levels)
-    for i, g in enumerate(gray_levels):
         mapping_q[g] = qam_levels[n_levels - 1 - i]
 
     # 5. Bit processing
@@ -50,7 +51,9 @@ def qam_mod(bits, modulation_order):
     return np.array(symbols)
 
 def qam_demod(symbols, modulation_order):
+    
     print("\n \n \n \n")
+    
     k = int(np.log2(modulation_order))
     k_half = k // 2
     n_levels = 2 ** k_half

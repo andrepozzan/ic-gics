@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-from qam import qam_modulate_passband, qam_demodulate_passband
+from qam import qam_mod, qam_modulate_passband, qam_demodulate_passband
 from ofdma import generate_OFDMA_signal, extract_bits_from_ofdma
 
 from calc_coef import DPDConfig, calcCoef, estimatedValueWithLUT, dpdTraining
@@ -17,11 +17,11 @@ out_validation = mat['out_validation'].flatten()
 
 
 N_USERS = 2
-SUB_PER_USER = 5
+SUB_PER_USER = 8
 MOD_ORDER = 16
 NFFT = 2048
 
-N_LUT_LINES = 4 #LUT matrix lines
+N_LUT_LINES = 4#LUT matrix lines
 N_LUT_COLUMNS = 4#LUT matrix columns
 
 FS = 1e9  # Sampling rate: 1 MHz
@@ -87,6 +87,10 @@ def calculate_ber(tx_bits, rx_bits):
     return ber, n_errors, n_bits
 
 
+def split_bits_by_symbol(bit_string, bits_per_symbol):
+    return [bit_string[i:i + bits_per_symbol] for i in range(0, len(bit_string), bits_per_symbol)]
+
+
 print("Bits send per User:")
 for i, bits in enumerate(bits_send):
     print(f"Usuário {i}: {group_bits(bits)}")
@@ -99,6 +103,58 @@ print("\nBER per User:")
 for i, (tx_bits, rx_bits) in enumerate(zip(bits_send, bits_received)):
     ber, n_errors, n_bits = calculate_ber(tx_bits, rx_bits)
     print(f"Usuário {i}: BER = {ber:.2e} ({n_errors}/{n_bits} bit errors)")
+
+
+# Constellation diagrams for original and demodulated bit streams.
+bits_per_symbol = int(np.log2(MOD_ORDER))
+max_cols = 3
+n_cols = min(max_cols, N_USERS)
+n_rows = int(np.ceil(N_USERS / n_cols))
+fig, axes = plt.subplots(n_rows, n_cols, figsize=(7 * n_cols, 5 * n_rows), squeeze=False)
+axes = axes.flatten()
+
+constellation_sets = []
+
+for user_idx, (tx_bits, rx_bits) in enumerate(zip(bits_send, bits_received)):
+    ax = axes[user_idx]
+    tx_symbols = qam_mod(tx_bits, MOD_ORDER)
+    rx_symbols = qam_mod(rx_bits, MOD_ORDER)
+    constellation_sets.extend([tx_symbols, rx_symbols])
+
+    ax.scatter(tx_symbols.real, tx_symbols.imag, s=200, alpha=1, marker='o', color='blue', label='Original bits')
+    ax.scatter(rx_symbols.real, rx_symbols.imag, s=200, alpha=1, marker='x', color='red', label='Demodulated bits')
+
+    tx_labels = split_bits_by_symbol(tx_bits, bits_per_symbol)
+    rx_labels = split_bits_by_symbol(rx_bits, bits_per_symbol)
+
+    for sym, label in list(zip(tx_symbols, tx_labels))[:20]:
+        ax.text(sym.real + 0.08, sym.imag + 0.08, f"T:{label}", fontsize=8)
+    for sym, label in list(zip(rx_symbols, rx_labels))[:20]:
+        ax.text(sym.real + 0.08, sym.imag - 0.22, f"R:{label}", fontsize=8)
+
+    ax.set_title(f"User {user_idx}: Original vs Demodulated")
+
+all_points = np.concatenate(constellation_sets)
+axis_limit = 1.2 * np.max(np.abs(np.concatenate([all_points.real, all_points.imag])))
+if axis_limit == 0:
+    axis_limit = 1.0
+
+for ax in axes:
+    ax.axhline(0, color='gray', linewidth=0.8)
+    ax.axvline(0, color='gray', linewidth=0.8)
+    ax.grid(True, alpha=0.3)
+    ax.set_aspect('equal', adjustable='box')
+    ax.set_xlim(-axis_limit, axis_limit)
+    ax.set_ylim(-axis_limit, axis_limit)
+    ax.set_xlabel("I")
+    ax.set_ylabel("Q")
+    ax.legend()
+
+for ax in axes[N_USERS:]:
+    ax.set_visible(False)
+
+plt.tight_layout()
+plt.show()
 
 # NMSE
 out_estimated = estimatedValueWithLUT(in_validation, optimized_coef, dpd_cfg)
@@ -121,10 +177,15 @@ plt.title("Validação da Cascata: Original vs Saída do Sistema")
 
 
 amp_input = np.abs(ofdma_signal)
+amp_output_dpd_block = np.abs(out_dpd)
 amp_output_dpd = np.abs(out_of_amp)
 out_no_dpd = estimatedValueWithLUT(ofdma_signal, optimized_coef, dpd_cfg)
 amp_output_no_dpd = np.abs(out_no_dpd)
+
+
+
 plt.figure(figsize=(10, 7))
+plt.scatter(amp_input, amp_output_dpd_block, s=80, label='DPD output', alpha=0.8)
 plt.scatter(amp_input, amp_output_no_dpd, s=80, label='PA sem DPD', alpha=0.8)
 plt.scatter(amp_input, amp_output_dpd, s=80, label='PA com DPD (Cascata)', alpha=0.8)
 lim = np.max(amp_input)

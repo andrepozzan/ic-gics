@@ -15,8 +15,8 @@ def generate_OFDMA_signal(Nfft, number_of_users, subcarriers_per_user, modulatio
         end = start + subcarriers_per_user
 
         # Generate random user bits and map them to QAM symbols.
-        # bits = ''.join(np.random.choice(['0','1'], int(np.log2(modulation_order))*subcarriers_per_user))
-        bits = "0000 0001 0010 0011 0100";
+        bits = ''.join(np.random.choice(['0','1'], int(np.log2(modulation_order))*subcarriers_per_user))
+        # bits = "0000 0001 0010 0011 0100";
         bits = bits.replace(" ", "")
         
         symbols = qam_mod(bits, modulation_order)
