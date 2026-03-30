@@ -20,7 +20,7 @@ gain = np.sqrt(ideal_symbol_power / measured_power)
 symbols = symbols * gain
 print('symbols: ', symbols)
 
-Com esse ajuste pelo ganho a demodulação melhorou de forma significativa, observei que para poucos usuários
+Com esse ajuste pelo ganho a demodulação melhorou de forma significativa, observei que para poucos Users
 o ajuste necessário é baixo ~0,3 mas quanto aumento a quantidade para em torno de 20 passa para ~1,7, isso
 é esperado pois a OFDMA exige bastante do amplificador em uma faixa grande de frequência e nem todas as faixas
 possuem um bom treinamento dos coeficientes por conta dos dados de entrada.
@@ -44,14 +44,13 @@ gain: 0.24906499036415222
 i_levels: [-1 -3 3 3]
 q_levels: [ 3 -3 1 3]
 Bits send per User:
-Usuário 0: 0001 0001 0101 0110
-Usuário 1: 0100 0010 1001 1000
+User 0: 0001 0001 0101 0110
+User 1: 0100 0010 1001 1000
 
 Bits received per User:
-Usuário 0: 0001 0001 0101 0110
-Usuário 1: 0100 0010 1001 1000
+User 0: 0001 0001 0101 0110
+User 1: 0100 0010 1001 1000
 NMSE: -26.799914 dB
-
 
 Tabela QAM implementada
 

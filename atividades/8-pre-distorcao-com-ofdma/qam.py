@@ -4,7 +4,6 @@ def qam_mod(bits, modulation_order):
     
     k = int(np.log2(modulation_order)) 
 
-
     k_half = k // 2
     n_levels = 2**k_half
     

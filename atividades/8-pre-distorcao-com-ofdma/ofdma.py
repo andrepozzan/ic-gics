@@ -29,7 +29,7 @@ def generate_OFDMA_signal(Nfft, number_of_users, subcarriers_per_user, modulatio
         all_original_bits.append(bits)
 
     # Convert frequency-domain grid to time-domain signal.
-    band_ifft = np.fft.ifft(complete_band) * np.sqrt(Nfft)
+    band_ifft = np.fft.ifft(complete_band) * np.sqrt(Nfft)    
 
     return band_ifft, all_original_bits
 

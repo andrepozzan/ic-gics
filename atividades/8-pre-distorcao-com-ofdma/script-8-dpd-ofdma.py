@@ -25,7 +25,7 @@ N_LUT_LINES = 4#LUT matrix lines
 N_LUT_COLUMNS = 4#LUT matrix columns
 
 FS = 1e9  # Sampling rate: 1 MHz
-FC = 5e7  # Carrier frequency: 100 kHz
+FC = 3.84e6  # Carrier frequency: 3.84 MHz (typical for LTE)
 
 # Techniques for initializing the LUT coefficients:
 # initial_complex_coef = (np.zeros((N_LUT_LINES, N_LUT_COLUMNS)) + 1j * np.zeros((N_LUT_LINES, N_LUT_COLUMNS)))
@@ -44,8 +44,8 @@ dpd_cfg = DPDConfig(
 
 
 #Normalized Mean Square Error
-def calculate_nmse(out_validation, saida_estimada):
-    erro = out_validation - saida_estimada
+def calculate_nmse(out_validation, out_estimated):
+    erro = out_validation - out_estimated
     nmse = 10 * np.log10(np.sum(np.abs(erro)**2) / np.sum(np.abs(out_validation)**2))
     return nmse
 
@@ -80,8 +80,12 @@ def group_bits(bit_string, group_size=4):
 
 def calculate_ber(tx_bits, rx_bits):
     n_bits = min(len(tx_bits), len(rx_bits))
+    
+    # avoid div by zero
     if n_bits == 0:
         return 0.0, 0, 0
+    
+    # zip create a pair of bits (tx, rx) and sum the number of pairs that are different
     n_errors = sum(tb != rb for tb, rb in zip(tx_bits[:n_bits], rx_bits[:n_bits]))
     ber = n_errors / n_bits
     return ber, n_errors, n_bits
@@ -93,68 +97,55 @@ def split_bits_by_symbol(bit_string, bits_per_symbol):
 
 print("Bits send per User:")
 for i, bits in enumerate(bits_send):
-    print(f"Usuário {i}: {group_bits(bits)}")
+    print(f"User {i}: {group_bits(bits)}")
     
 print("\nBits received per User:")
 for i, bits in enumerate(bits_received):
-    print(f"Usuário {i}: {group_bits(bits)}")
+    print(f"User {i}: {group_bits(bits)}")
 
 print("\nBER per User:")
 for i, (tx_bits, rx_bits) in enumerate(zip(bits_send, bits_received)):
     ber, n_errors, n_bits = calculate_ber(tx_bits, rx_bits)
-    print(f"Usuário {i}: BER = {ber:.2e} ({n_errors}/{n_bits} bit errors)")
+    print(f"User {i}: BER = {ber:.2e} ({n_errors}/{n_bits} bit errors)")
 
 
 # Constellation diagrams for original and demodulated bit streams.
 bits_per_symbol = int(np.log2(MOD_ORDER))
-max_cols = 3
-n_cols = min(max_cols, N_USERS)
-n_rows = int(np.ceil(N_USERS / n_cols))
-fig, axes = plt.subplots(n_rows, n_cols, figsize=(7 * n_cols, 5 * n_rows), squeeze=False)
-axes = axes.flatten()
-
-constellation_sets = []
-
 for user_idx, (tx_bits, rx_bits) in enumerate(zip(bits_send, bits_received)):
-    ax = axes[user_idx]
+    fig, ax = plt.subplots(figsize=(8, 7))
     tx_symbols = qam_mod(tx_bits, MOD_ORDER)
     rx_symbols = qam_mod(rx_bits, MOD_ORDER)
-    constellation_sets.extend([tx_symbols, rx_symbols])
 
-    ax.scatter(tx_symbols.real, tx_symbols.imag, s=200, alpha=1, marker='o', color='blue', label='Original bits')
-    ax.scatter(rx_symbols.real, rx_symbols.imag, s=200, alpha=1, marker='x', color='red', label='Demodulated bits')
+    ax.scatter(tx_symbols.real, tx_symbols.imag, s=600, alpha=1, marker='o', color='blue', label='Original bits')
+    ax.scatter(rx_symbols.real, rx_symbols.imag, s=600, alpha=1, marker='x', color='red', label='Demodulated bits')
 
     tx_labels = split_bits_by_symbol(tx_bits, bits_per_symbol)
     rx_labels = split_bits_by_symbol(rx_bits, bits_per_symbol)
 
     for sym, label in list(zip(tx_symbols, tx_labels))[:20]:
-        ax.text(sym.real + 0.08, sym.imag + 0.08, f"T:{label}", fontsize=8)
+        ax.text(sym.real + 0.16, sym.imag + 0.16, f"TX:{label}", fontsize=15)
     for sym, label in list(zip(rx_symbols, rx_labels))[:20]:
-        ax.text(sym.real + 0.08, sym.imag - 0.22, f"R:{label}", fontsize=8)
+        ax.text(sym.real + 0.16, sym.imag - 0.44, f"RX:{label}", fontsize=15)
 
-    ax.set_title(f"User {user_idx}: Original vs Demodulated")
-
-all_points = np.concatenate(constellation_sets)
-axis_limit = 1.2 * np.max(np.abs(np.concatenate([all_points.real, all_points.imag])))
-if axis_limit == 0:
-    axis_limit = 1.0
-
-for ax in axes:
     ax.axhline(0, color='gray', linewidth=0.8)
     ax.axvline(0, color='gray', linewidth=0.8)
     ax.grid(True, alpha=0.3)
+
+    user_points = np.concatenate([tx_symbols, rx_symbols])
+    axis_limit = 1.2 * np.max(np.abs(np.concatenate([user_points.real, user_points.imag])))
+    if axis_limit == 0:
+        axis_limit = 1.0
+
     ax.set_aspect('equal', adjustable='box')
     ax.set_xlim(-axis_limit, axis_limit)
     ax.set_ylim(-axis_limit, axis_limit)
-    ax.set_xlabel("I")
-    ax.set_ylabel("Q")
-    ax.legend()
-
-for ax in axes[N_USERS:]:
-    ax.set_visible(False)
-
-plt.tight_layout()
-plt.show()
+    ax.set_xlabel("I", fontsize=30)
+    ax.set_ylabel("Q", fontsize=30)
+    ax.legend(fontsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    ax.set_title(f"User {user_idx}: Original vs Demodulated", fontsize=22)
+    plt.tight_layout()
+    plt.show()
 
 # NMSE
 out_estimated = estimatedValueWithLUT(in_validation, optimized_coef, dpd_cfg)
@@ -163,17 +154,23 @@ nmse = calculate_nmse(out_validation, out_estimated)
 print(f"NMSE: {nmse:.6f} dB")
 
 
-plt.plot(t, ideal_theoric_signal, label='Original (Referência)', color='blue', linewidth=2, alpha=0.8)
-plt.plot(t, out_of_antena, label='Saída do PA com DPD', color='red', linestyle='--', linewidth=2)
-plt.title("Validação da Cascata: Original vs Saída do Sistema")
+plt.plot(t, ideal_theoric_signal, label='Original (Reference)', color='blue', linewidth=2, alpha=0.8)
+plt.plot(t, out_of_antena, label='PA Output with DPD', color='red', linestyle='--', linewidth=2)
+plt.title("Cascade Validation: Original vs System Output", fontsize=18)
+plt.xlabel("Time (s)", fontsize=30)
+plt.ylabel("Amplitude (a.u.)", fontsize=30)
+plt.legend(fontsize=20)
+plt.grid()
+plt.tick_params(axis='both', which='major', labelsize=18)
 
-# plt.figure()
-# plt.hist(np.abs(in_training), bins=N_LUT_COLUMNS, color='skyblue', edgecolor='black')
-# plt.axhline(y=N_LUT_LINES * 10, color='red', linestyle='--', label='Recommended Minimum')
-# plt.title(f"Sample Distribution per LUT Column ({N_LUT_COLUMNS} columns)")
-# plt.xlabel("Amplitude |x|")
-# plt.ylabel("Número de Amostras")
-# plt.legend()
+plt.figure()
+plt.hist(np.abs(in_training), bins=N_LUT_COLUMNS*N_LUT_LINES, color='skyblue', edgecolor='black')
+plt.axhline(y=N_LUT_LINES * 10, color='red', linestyle='--', label='Recommended Minimum')
+plt.title(f"Sample Distribution per LUT Column ({N_LUT_COLUMNS} columns)", fontsize=22)
+plt.xlabel("Amplitude |x|", fontsize=30)
+plt.ylabel("Number of Samples", fontsize=30)
+plt.legend(fontsize=20)
+plt.tick_params(axis='both', which='major', labelsize=18)
 
 
 amp_input = np.abs(ofdma_signal)
@@ -186,18 +183,19 @@ amp_output_no_dpd = np.abs(out_no_dpd)
 
 plt.figure(figsize=(10, 7))
 plt.scatter(amp_input, amp_output_dpd_block, s=80, label='DPD output', alpha=0.8)
-plt.scatter(amp_input, amp_output_no_dpd, s=80, label='PA sem DPD', alpha=0.8)
-plt.scatter(amp_input, amp_output_dpd, s=80, label='PA com DPD (Cascata)', alpha=0.8)
+plt.scatter(amp_input, amp_output_no_dpd, s=80, label='PA without DPD', alpha=0.8)
+plt.scatter(amp_input, amp_output_dpd, s=80, label='PA with DPD (Cascade)', alpha=0.8)
 lim = np.max(amp_input)
-plt.plot([0, lim], [0, lim], 'r--', label='Referência Linear', linewidth=2)
-plt.xlabel("Amplitude de Entrada")
-plt.ylabel("Amplitude de Saı́da")
-plt.title("Gráfico AM-AM")
+plt.plot([0, lim], [0, lim], 'r--', label='Linear Reference', linewidth=2)
+plt.xlabel("Input Amplitude", fontsize=30)
+plt.ylabel("Output Amplitude", fontsize=30)
+plt.title("AM-AM Plot", fontsize=22)
 
 
 
 
-plt.legend()
+plt.legend(fontsize=20)
 plt.grid()
+plt.tick_params(axis='both', which='major', labelsize=18)
 plt.show()
 

@@ -35,57 +35,73 @@ Este repositório foi criado para:
 ```text
 .
 ├── assets
-│   ├── ativ7.png
-│   ├── gics-branco.png
-│   ├── gics-logo.png
-│   ├── logo-ufpr.svg
-│   └── semicro.png
+│   ├── ativ7.png
+│   ├── gics-branco.png
+│   ├── gics-logo.png
+│   ├── logo-ufpr.svg
+│   ├── semicro.png
+│   └── slides-semicro.png
 ├── atividades
-│   ├── 1-minimos-quadrados
-│   │   ├── mmq-tabela.py
-│   │   ├── mmq-tabela-saida.csv
-│   │   ├── mmq-tabela-saida.txt
-│   │   └── script.py
-│   ├── 2-in-out-amplificador
-│   │   ├── IN_OUT_PA.mat
-│   │   └── script.py
-│   ├── 3-modelo-mp
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── matriz.txt
-│   │   └── script.py
-│   ├── 4-modelo-nao-linear
-│   │   ├── 3D-model.py
-│   │   ├── IN_OUT_PA.mat
-│   │   ├── script.py
-│   │   └── terminal-out.txt
-│   ├── 5-modelo-nao-linear-complexo
-│   │   ├── 3D-model.py
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── script-3.py
-│   │   ├── script-5.py
-│   │   └── terminal-out.txt
-│   ├── 6-luts-interpolacao-linear
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── script-6-lut.py
-│   │   └── terminal-out.txt
-│   └── 7-luts-tamanho-variavel
-│       ├── in_out_SBRT2_direto.mat
-│       ├── script-7-heatmap.py
-│       ├── script-7-lut.py
-│       └── terminal-out.txt
+│   ├── 1-minimos-quadrados
+│   │   ├── mmq-tabela.py
+│   │   ├── mmq-tabela-saida.csv
+│   │   ├── mmq-tabela-saida.txt
+│   │   └── script.py
+│   ├── 2-in-out-amplificador
+│   │   ├── IN_OUT_PA.mat
+│   │   └── script.py
+│   ├── 3-modelo-mp
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── matriz.txt
+│   │   └── script.py
+│   ├── 4-modelo-nao-linear
+│   │   ├── 3D-model.py
+│   │   ├── IN_OUT_PA.mat
+│   │   ├── script.py
+│   │   └── terminal-out.txt
+│   ├── 5-modelo-nao-linear-complexo
+│   │   ├── 3D-model.py
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── script-3.py
+│   │   ├── script-5.py
+│   │   └── terminal-out.txt
+│   ├── 6-luts-interpolacao-linear
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── script-6-lut.py
+│   │   └── terminal-out.txt
+│   ├── 7-luts-tamanho-variavel
+│   │   ├── in_out_SBRT2_direto.mat
+│   │   ├── script-7-heatmap.py
+│   │   ├── script-7-lut.py
+│   │   └── terminal-out.txt
+│   └── 8-pre-distorcao-com-ofdma
+│       ├── calc_coef.py
+│       ├── complex_coef.py
+│       ├── descricao.txt
+│       ├── in_out_SBRT2_direto.mat
+│       ├── ofdma.py
+│       ├── __pycache__
+│       │   ├── calc_coef.cpython-310.pyc
+│       │   ├── complex_coef.cpython-310.pyc
+│       │   ├── ofdma.cpython-310.pyc
+│       │   └── qam.cpython-310.pyc
+│       ├── qam.py
+│       └── script-8-dpd-ofdma.py
 ├── README.md
 ├── relatorios
-│   ├── artigo-semicro2025-andrepozzan.pdf
-│   ├── Atividade_1_IC_GICS.pdf
-│   ├── Atividade_2_IC_GICS.pdf
-│   ├── Atividade_3_IC_GICS.pdf
-│   ├── Atividade_4_IC_GICS-andrepozzan.pdf
-│   ├── Atividade_5_IC_GICS-andrepozzan.pdf
-│   ├── Atividade_6_IC_GICS-andrepozzan.pdf
-│   └── Atividade_7_IC_GICS-andrepozzan.pdf
+│   ├── artigo-semicro2025-andrepozzan2.pdf.pdf
+│   ├── Atividade_1_IC_GICS.pdf
+│   ├── Atividade_2_IC_GICS.pdf
+│   ├── Atividade_3_IC_GICS.pdf
+│   ├── Atividade_4_IC_GICS-andrepozzan.pdf
+│   ├── Atividade_5_IC_GICS-andrepozzan.pdf
+│   ├── Atividade_6_IC_GICS-andrepozzan.pdf
+│   ├── Atividade_7_IC_GICS-andrepozzan.pdf
+│   └── slides-SEMICRO-final-1.pdf
 └── requirements.txt
 
-10 directories, 40 files
+12 directories, 53 files
+
 ```
 
 ---
@@ -143,7 +159,6 @@ O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozza
 <p align="center">
   <img src="./assets/slides-semicro.png" alt="Slides SeMicro" width="500px" 
 </p>
-
 
 ### Último relatório realizado:
 
