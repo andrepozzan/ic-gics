@@ -4,7 +4,7 @@ Bits -> OFDMA+QAM -> DPD -> PA -> Modulação para real + imag -> Demodulação 
 
 Para a DPD utilizei a seguinte expressão: dpd_coef = dpdTraining(in_training, out_training),
 em que essa função faz o calculo dos coeficientes invertendo a saída com a entrada para o mesmo
-método feito anteriormente, o resultado no gráfico AM-AM foi bom.
+método feito anteriormente, o resultado no gráfico AM-AM foi aprox. linear.
 
 Na demodulação foi necessário o ajuste de ganho:
 
@@ -34,8 +34,6 @@ espaçamentos qam_levels: [-3 -1 1 3] para a representação complexa, ex:
 0011 -> -3 - j1
 
 Pelo que pesquisei utilizar intervalos simétricos fica melhor para a detecção
-
-Para simular a transmissão apliquei uma frequência de 50MHz
 
 Exemplo de saída do código:
 

@@ -80,11 +80,6 @@ Este repositório foi criado para:
 │       ├── descricao.txt
 │       ├── in_out_SBRT2_direto.mat
 │       ├── ofdma.py
-│       ├── __pycache__
-│       │   ├── calc_coef.cpython-310.pyc
-│       │   ├── complex_coef.cpython-310.pyc
-│       │   ├── ofdma.cpython-310.pyc
-│       │   └── qam.cpython-310.pyc
 │       ├── qam.py
 │       └── script-8-dpd-ofdma.py
 ├── README.md
@@ -100,8 +95,7 @@ Este repositório foi criado para:
 │   └── slides-SEMICRO-final-1.pdf
 └── requirements.txt
 
-12 directories, 53 files
-
+11 directories, 49 files
 ```
 
 ---
@@ -147,9 +141,9 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
 
 ---
 
-## Publicação SeMicro-PR
+## Publicação SeMicro-PR 2025
 
-Acesse: <a href="https://jpm.ufpr.br/">https://jpm.ufpr.br/</a>
+Acesse: <a href="https://jpm.ufpr.br/anais/#:~:text=Modelagem comportamental de amplificadores de potência usando polinômios com memória">JPM-Modelagem comportamental de amplificadores de potência usando polinômios com memória</a>
 
 O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozzan.pdf"
 
