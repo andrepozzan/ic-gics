@@ -35,6 +35,7 @@ Este repositório foi criado para:
 ```text
 .
 ├── assets
+│   ├── artigo-emicro-sim-capa.png
 │   ├── ativ7.png
 │   ├── gics-branco.png
 │   ├── gics-logo.png
@@ -43,47 +44,21 @@ Este repositório foi criado para:
 │   └── slides-semicro.png
 ├── atividades
 │   ├── 1-minimos-quadrados
-│   │   ├── mmq-tabela.py
-│   │   ├── mmq-tabela-saida.csv
-│   │   ├── mmq-tabela-saida.txt
-│   │   └── script.py
 │   ├── 2-in-out-amplificador
-│   │   ├── IN_OUT_PA.mat
-│   │   └── script.py
 │   ├── 3-modelo-mp
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── matriz.txt
-│   │   └── script.py
 │   ├── 4-modelo-nao-linear
-│   │   ├── 3D-model.py
-│   │   ├── IN_OUT_PA.mat
-│   │   ├── script.py
-│   │   └── terminal-out.txt
 │   ├── 5-modelo-nao-linear-complexo
-│   │   ├── 3D-model.py
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── script-3.py
-│   │   ├── script-5.py
-│   │   └── terminal-out.txt
 │   ├── 6-luts-interpolacao-linear
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── script-6-lut.py
-│   │   └── terminal-out.txt
 │   ├── 7-luts-tamanho-variavel
-│   │   ├── in_out_SBRT2_direto.mat
-│   │   ├── script-7-heatmap.py
-│   │   ├── script-7-lut.py
-│   │   └── terminal-out.txt
 │   └── 8-pre-distorcao-com-ofdma
-│       ├── calc_coef.py
-│       ├── complex_coef.py
-│       ├── descricao.txt
-│       ├── in_out_SBRT2_direto.mat
-│       ├── ofdma.py
-│       ├── qam.py
-│       └── script-8-dpd-ofdma.py
+├── certificados
+│   ├── EMICRO-SIM-2026-apresentacao.pdf
+│   ├── EMICRO-SIM-2026-participacao.pdf
+│   └── SeMicro2025certificado.pdf
 ├── README.md
 ├── relatorios
+│   ├── 6A-24-Andre-Pozzan-Behavioral-Modeling-of-Power-Amplifiers-v2.pdf
+│   ├── artigo-EMICRO_andrepozzan_v05.pdf
 │   ├── artigo-semicro2025-andrepozzan2.pdf.pdf
 │   ├── Atividade_1_IC_GICS.pdf
 │   ├── Atividade_2_IC_GICS.pdf
@@ -95,7 +70,8 @@ Este repositório foi criado para:
 │   └── slides-SEMICRO-final-1.pdf
 └── requirements.txt
 
-11 directories, 49 files
+12 directories, 23 files
+
 ```
 
 ---
@@ -140,25 +116,42 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
   Tamanho Variável
 
 ---
+## Artigos publicados
 
-## Publicação SeMicro-PR 2025
+
+### EMICRO SIM 2026
+
+<a href="https://sites.google.com/view/emicro-sim-2026/programa%C3%A7%C3%A3o" target="_blank" rel="noopener noreferrer">
+  EMicro | SIM 2026 - Programação (12/06 - Sessão 6A)
+</a>
+
+
+<a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/artigo-EMICRO_andrepozzan_v05.pdf">Artigo completo</a>
+<p align="center">
+  <img src="./assets/artigo-emicro-sim-capa.png" alt="Artigo SeMicro" width="500px" 
+</p>
+
+
+
+### SeMicro-PR 2025
 
 Acesse: <a href="https://jpm.ufpr.br/anais/#:~:text=Modelagem comportamental de amplificadores de potência usando polinômios com memória">JPM-Modelagem comportamental de amplificadores de potência usando polinômios com memória</a>
 
-O artigo completo está disponível em "relatorios/artigo-semicro2025-andrepozzan.pdf"
-
+<a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/artigo-semicro2025-andrepozzan2.pdf.pdf">Artigo completo</a>
 <p align="center">
   <img src="./assets/semicro.png" alt="Artigo SeMicro" width="500px" 
 </p>
-<p align="center">
+<!-- <p align="center">
   <img src="./assets/slides-semicro.png" alt="Slides SeMicro" width="500px" 
-</p>
+</p> -->
 
-### Último relatório realizado:
+
+
+<!-- ### Último relatório realizado:
 
 <p align="center">
   <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="500px" 
-</p>
+</p> -->
 
 ## 👤 Autor
 
