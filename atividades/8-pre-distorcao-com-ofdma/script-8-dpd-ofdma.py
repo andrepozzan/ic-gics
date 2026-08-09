@@ -18,22 +18,18 @@ in_validation = mat['in_validation'].flatten()
 out_validation = mat['out_validation'].flatten()
 
 
-N_USERS = 8
-SUB_PER_USER = 26
-MOD_ORDER = 1024
+N_USERS = 2
+SUB_PER_USER = 48
+MOD_ORDER = 256
 NFFT = 2048
 
 N_LUT_LINES = 4  # LUT matrix lines
 N_LUT_COLUMNS = 4  # LUT matrix columns
 
 FS = 1e9  # Sampling rate: 1 MHz
-FC = 3.84e6  # Carrier frequency: 3.84 MHz (typical for LTE)
+FC = 100e6  # Carrier frequency: 3.84 MHz (typical for LTE)
 
-# Techniques for initializing the LUT coefficients:
-# initial_complex_coef = (np.zeros((N_LUT_LINES, N_LUT_COLUMNS)) + 1j * np.zeros((N_LUT_LINES, N_LUT_COLUMNS)))
-# initial_complex_coef = (np.ones((N_LUT_LINES, N_LUT_COLUMNS)) + 1j * np.ones((N_LUT_LINES, N_LUT_COLUMNS)))
-initial_complex_coef = (np.random.randn(
-    N_LUT_LINES, N_LUT_COLUMNS) + 1j * np.random.randn(N_LUT_LINES, N_LUT_COLUMNS))
+initial_complex_coef = np.zeros((N_LUT_LINES, N_LUT_COLUMNS), dtype=complex)
 
 
 interpolation_in = np.linspace(
@@ -53,6 +49,22 @@ def calculate_nmse(out_validation, out_estimated):
     nmse = 10 * np.log10(np.sum(np.abs(erro)**2) /
                          np.sum(np.abs(out_validation)**2))
     return nmse
+
+
+def calculate_psd(signal, fs):
+    n_samples = len(signal)
+    if n_samples == 0:
+        return np.array([]), np.array([])
+
+    window = np.hanning(n_samples)
+    windowed_signal = signal * window
+    spectrum = np.fft.fftshift(np.fft.fft(windowed_signal))
+    freq = np.fft.fftshift(np.fft.fftfreq(n_samples, d=1 / fs))
+
+    power_density = (np.abs(spectrum) ** 2) / (np.sum(window ** 2) * fs)
+    psd_db = 10 * np.log10(power_density + 1e-20)
+
+    return freq, psd_db
 
 
 ofdma_signal, bits_send = generate_OFDMA_signal(
@@ -167,8 +179,7 @@ print("\nBER per User:")
 for i, (tx_bits, rx_bits) in enumerate(zip(bits_send, bits_received)):
     ber, n_errors, n_bits = calculate_ber(tx_bits, rx_bits)
     ber_percent = ber * 100
-    print(f"User {i}: BER = {
-          ber_percent:.2f}% ({n_errors}/{n_bits})")
+    print(f"User {i}: BER = {ber_percent:.2f}% ({n_errors}/{n_bits})")
 
 
 # Constellation diagrams for original and demodulated bit streams.
@@ -259,22 +270,65 @@ out_no_dpd = estimatedValueWithLUT(
 amp_output_no_dpd = np.abs(out_no_dpd)
 
 
-plt.figure(figsize=(20, 9))
-plt.scatter(amp_input, amp_output_dpd_block,
-            s=80, label='DPD output', alpha=0.8)
-plt.scatter(amp_input, amp_output_no_dpd, s=80,
-            label='PA without DPD', alpha=0.8)
-plt.scatter(amp_input, amp_output_dpd, s=80,
-            label='PA with DPD (Cascade)', alpha=0.8)
-lim = np.max(amp_input)
-plt.plot([0, lim], [0, lim], 'r--',
-         label='Linear Reference', linewidth=2)
-plt.xlabel("Input Amplitude", fontsize=30)
-plt.ylabel("Output Amplitude", fontsize=30)
-plt.title("AM-AM Plot", fontsize=22)
+# plt.figure(figsize=(20, 9))
+# plt.scatter(amp_input, amp_output_dpd_block,
+#             s=80, label='DPD output', alpha=0.8)
+# plt.scatter(amp_input, amp_output_no_dpd, s=80,
+#             label='PA without DPD', alpha=0.8)
+# plt.scatter(amp_input, amp_output_dpd, s=80,
+#             label='PA with DPD (Cascade)', alpha=0.8)
+# lim = np.max(amp_input)
+# plt.plot([0, lim], [0, lim], 'r--',
+#          label='Linear Reference', linewidth=2)
+# plt.xlabel("Input Amplitude", fontsize=30)
+# plt.ylabel("Output Amplitude", fontsize=30)
+# plt.title("AM-AM Plot", fontsize=22)
 
 
-plt.legend(fontsize=20)
-plt.grid()
-plt.tick_params(axis='both', which='major', labelsize=18)
+# plt.legend(fontsize=20)
+# plt.grid()
+# plt.tick_params(axis='both', which='major', labelsize=18)
+# plt.show()
+
+
+
+# PSD comparison before and after DPD.
+freq_in, psd_in = calculate_psd(ofdma_signal, FS)
+freq_no_dpd, psd_no_dpd = calculate_psd(out_no_dpd, FS)
+freq_with_dpd, psd_with_dpd = calculate_psd(out_of_amp, FS)
+
+psd_reference = np.max([
+    np.max(psd_in) if psd_in.size else -np.inf,
+    np.max(psd_no_dpd) if psd_no_dpd.size else -np.inf,
+    np.max(psd_with_dpd) if psd_with_dpd.size else -np.inf,
+])
+
+# Ajuste do tamanho da figura para proporções mais próximas do MATLAB
+plt.figure(figsize=(10, 7))
+
+# Ordem de plotagem: Input (Preto) -> Com DPD (Vermelho) -> Sem DPD (Verde Claro)
+# Linhas mais finas (linewidth=0.8) para simular o traço do MATLAB
+plt.plot(freq_in / 1e6, psd_in - psd_reference, 
+         color='black', label='Input signal', linewidth=2.5, zorder=1)
+
+plt.plot(freq_with_dpd / 1e6, psd_with_dpd - psd_reference, 
+         color='red', label='Output with DPD', linewidth=2.5, zorder=2)
+
+plt.plot(freq_no_dpd / 1e6, psd_no_dpd - psd_reference,
+         color='lime', label='Output without DPD', linewidth=2.5, zorder=3)
+
+# Rótulos dos eixos idênticos à imagem
+plt.xlabel('Frequency (MHz)', fontsize=12)
+plt.ylabel('Power Spectral Density (dB/MHz)', fontsize=12)
+
+
+# Grade estilo MATLAB
+plt.grid(True, which='both', color='gray', alpha=0.5, linestyle='-')
+
+# Caixa da legenda no canto superior direito com borda preta
+legend = plt.legend(loc='upper right', fontsize=10, frameon=True)
+legend.get_frame().set_edgecolor('black')
+
+plt.tick_params(axis='both', which='major', labelsize=10)
+plt.tight_layout()
 plt.show()

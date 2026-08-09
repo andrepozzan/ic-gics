@@ -12,6 +12,8 @@
 
 ## 📖 Sobre
 
+<a href="https://gics.ufpr.br/">GICS Website</a>
+
 O **GICS** (Grupo de Concepção de Circuitos e Sistemas Integrados), vinculado à UFPR, tem como objetivo atuar na pesquisa e desenvolvimento de circuitos e sistemas integrados de **radiofrequência (RF)**, **analógicos**, **mistos** e **digitais**, contribuindo para o avanço científico da área e para a formação de recursos humanos altamente especializados.
 
 Composto por professores com experiência internacional, o GICS desenvolve atividades nas seguintes áreas da **microeletrônica**:
@@ -119,7 +121,7 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
 ## Artigos publicados
 
 
-### EMICRO SIM 2026
+### EMICRO SIM 2026 / UFSM Santa Maria-RS
 
 <a href="https://sites.google.com/view/emicro-sim-2026/programa%C3%A7%C3%A3o" target="_blank" rel="noopener noreferrer">
   EMicro | SIM 2026 - Programação (12/06 - Sessão 6A)
@@ -133,7 +135,7 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
 
 
 
-### SeMicro-PR 2025
+### SeMicro-PR 2025 / UFPR Curitiba-PR
 
 Acesse: <a href="https://jpm.ufpr.br/anais/#:~:text=Modelagem comportamental de amplificadores de potência usando polinômios com memória">JPM-Modelagem comportamental de amplificadores de potência usando polinômios com memória</a>
 
