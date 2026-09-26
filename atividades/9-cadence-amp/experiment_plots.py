@@ -60,9 +60,16 @@ def plot_static_am_am(pa_model, dpd_model, maximum_input_amplitude,
         linear_gain = 1.0
 
     for amplitude in amplitudes:
+        if dpd_model is None:
+            cascade_output.append(pa_output[len(cascade_output)])
+            continue
         predistortion_target = np.full(
             settling_length, linear_gain * amplitude, dtype=complex)
         predistorted_signal = dpd_model.predict(predistortion_target)
+        predistorted_amplitude = np.abs(predistorted_signal)
+        limit_mask = predistorted_amplitude > maximum_input_amplitude
+        predistorted_signal[limit_mask] *= (
+            maximum_input_amplitude / predistorted_amplitude[limit_mask])
         cascade_output.append(
             np.abs(pa_model.predict(predistorted_signal)[-1]))
 
@@ -75,8 +82,9 @@ def plot_static_am_am(pa_model, dpd_model, maximum_input_amplitude,
     plt.figure(figsize=(10, 7))
     plt.plot(normalized_input, normalized_pa, 'o-', markersize=3,
              linewidth=1.5, label='PA without DPD')
+    cascade_label = 'PA with DPD' if dpd_model is not None else 'PA with DPD (bypassed)'
     plt.plot(normalized_input, normalized_cascade, 'o-', markersize=3,
-             linewidth=1.5, label='PA with DPD')
+             linewidth=1.5, label=cascade_label)
     plt.plot([0, 1], [0, 1], 'k--', linewidth=2,
              label='Ideal linear response')
     plt.xlabel('Normalized input amplitude', fontsize=14)

@@ -1,0 +1,782 @@
+HEADER
+"PSFversion" "1.00"
+"Log Generator" "drlLog rev. 1.0"
+"Log Time Stamp" "Sat Sep 26 16:26:10 2026"
+"psfversion" "1.4.0"
+"simulator" "spectre"
+"version" "25.1.0.417.isr11"
+"date" "4:26:10 PM, Sat Sep 26, 2026"
+"design" "// Point Netlist Generated on: Sep 26 15:45:01 2026"
+"signalNameType" "spectre"
+"simMode" "Spectre"
+"measdgt" 0
+"ingold" 2
+"sst2usecolon" 0
+TYPE
+"analysisInst" STRUCT(
+"analysisType" STRING *
+"dataFile" STRING *
+"format" STRING *
+"parent" STRING *
+"sweepVariable" ARRAY ( * ) STRING *
+"description" STRING *
+)
+VALUE
+"envlp-td.envlp" "analysisInst" (
+"td.envlp"
+"envlp.td.envlp"
+"PSF"
+""
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+)
+
+"envlp-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.fd.envlp"
+"PSF"
+""
+("harmonic")
+"fd.envlp parent"
+) PROP(
+"sweep_tree_type" "sweepNode"
+"data_type" "swept_scalar"
+)
+
+"envlp.0-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.0.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 0.00000
+)
+
+"envlp.1-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.1.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 1.00000
+)
+
+"envlp.2-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.2.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 2.00000
+)
+
+"envlp.3-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.3.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 3.00000
+)
+
+"envlp.4-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.4.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 4.00000
+)
+
+"envlp.5-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.5.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 5.00000
+)
+
+"envlp.6-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.6.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 6.00000
+)
+
+"envlp.7-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.7.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 7.00000
+)
+
+"envlp.8-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.8.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 8.00000
+)
+
+"envlp.9-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.9.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 9.00000
+)
+
+"envlp.10-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.10.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 10.0000
+)
+
+"envlp.11-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.11.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 11.0000
+)
+
+"envlp.12-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.12.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 12.0000
+)
+
+"envlp.13-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.13.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 13.0000
+)
+
+"envlp.14-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.14.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 14.0000
+)
+
+"envlp.15-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.15.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 15.0000
+)
+
+"envlp.16-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.16.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 16.0000
+)
+
+"envlp.17-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.17.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 17.0000
+)
+
+"envlp.18-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.18.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 18.0000
+)
+
+"envlp.19-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.19.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 19.0000
+)
+
+"envlp.20-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.20.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 20.0000
+)
+
+"envlp.21-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.21.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 21.0000
+)
+
+"envlp.22-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.22.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 22.0000
+)
+
+"envlp.23-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.23.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 23.0000
+)
+
+"envlp.24-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.24.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 24.0000
+)
+
+"envlp.25-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.25.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 25.0000
+)
+
+"envlp.26-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.26.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 26.0000
+)
+
+"envlp.27-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.27.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 27.0000
+)
+
+"envlp.28-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.28.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 28.0000
+)
+
+"envlp.29-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.29.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 29.0000
+)
+
+"envlp.30-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.30.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 30.0000
+)
+
+"envlp.31-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.31.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 31.0000
+)
+
+"envlp.32-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.32.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 32.0000
+)
+
+"envlp.33-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.33.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 33.0000
+)
+
+"envlp.34-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.34.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 34.0000
+)
+
+"envlp.35-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.35.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 35.0000
+)
+
+"envlp.36-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.36.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 36.0000
+)
+
+"envlp.37-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.37.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 37.0000
+)
+
+"envlp.38-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.38.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 38.0000
+)
+
+"envlp.39-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.39.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 39.0000
+)
+
+"envlp.40-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.40.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 40.0000
+)
+
+"envlp.41-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.41.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 41.0000
+)
+
+"envlp.42-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.42.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 42.0000
+)
+
+"envlp.43-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.43.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 43.0000
+)
+
+"envlp.44-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.44.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 44.0000
+)
+
+"envlp.45-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.45.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 45.0000
+)
+
+"envlp.46-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.46.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 46.0000
+)
+
+"envlp.47-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.47.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 47.0000
+)
+
+"envlp.48-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.48.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 48.0000
+)
+
+"envlp.49-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.49.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 49.0000
+)
+
+"envlp.50-fd.envlp" "analysisInst" (
+"fd.envlp"
+"envlp.50.fd.envlp"
+"PSF"
+"envlp-fd.envlp"
+("time")
+"Envelope Following Analysis `envlp': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+"sweep_tree_type" "leafNode"
+"harmonic" 50.0000
+)
+
+"modelParameter-info" "analysisInst" (
+"info"
+"modelParameter.info"
+"PSF"
+""
+()
+"Circuit Information"
+) PROP(
+"data_type" "struct"
+)
+
+"element-info" "analysisInst" (
+"info"
+"element.info"
+"PSF"
+""
+()
+"Circuit Information"
+) PROP(
+"data_type" "struct"
+)
+
+"outputParameter-info" "analysisInst" (
+"info"
+"outputParameter.info"
+"PSF"
+""
+()
+"Circuit Information"
+) PROP(
+"data_type" "struct"
+)
+
+"designParamVals-info" "analysisInst" (
+"info"
+"designParamVals.info"
+"PSF"
+""
+()
+"Circuit Information"
+) PROP(
+"data_type" "struct"
+)
+
+"primitives-info.primitives" "analysisInst" (
+"info.primitives"
+"primitives.info.primitives"
+"PSF"
+""
+()
+"Circuit Information"
+)
+"subckts-info.subckts" "analysisInst" (
+"info.subckts"
+"subckts.info.subckts"
+"PSF"
+""
+()
+"Circuit Information"
+)
+"tran-tran" "analysisInst" (
+"tran"
+"tran.tran.tran"
+"PSF"
+""
+("time")
+"Transient Analysis `tran': time = (0 s -> 20 ns)"
+) PROP(
+"data_type" "swept_scalar"
+)
+
+END

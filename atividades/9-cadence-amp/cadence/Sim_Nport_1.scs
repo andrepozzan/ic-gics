@@ -1,0 +1,23 @@
+simulator lang=spectre
+
+parameters input_file="sinal_entrada_cadence.pwl"
+parameters tstop=20n
+parameters maxstep=10p
+parameters gain=320
+parameters saturation_voltage=0.08
+
+// Excitation and 50-ohm source impedance.
+VIN (n_drive 0) vsource type=pwl file=input_file
+RSOURCE (n_drive n_in) resistor r=50
+
+// Two-port behavioral PA model.
+// vout = gain * vin / (1 + ratio * ratio)
+BPA (n_out 0) bsource v=(gain * V(n_in) / (1 + ((V(n_in) / saturation_voltage) * (V(n_in) / saturation_voltage))))
+RLOAD (n_out 0) resistor r=50
+
+tran tran stop=tstop maxstep=maxstep
+save n_in n_out
+
+// Optional S-parameter analysis for the behavioral two-port.
+// analiseSP sp start=1G stop=5G dec=10 ports=[P1 P2] file="PA_behavioral.s2p"
+

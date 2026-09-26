@@ -20,6 +20,16 @@ def align_by_delay(reference_signal, target_signal):
     return np.roll(target_signal, -delay), delay
 
 
+def compensate_complex_gain(reference_signal, target_signal):
+    denominator = np.vdot(reference_signal, reference_signal)
+    if np.abs(denominator) == 0:
+        return target_signal, 1.0 + 0.0j
+    gain = np.vdot(reference_signal, target_signal) / denominator
+    if np.abs(gain) == 0:
+        return target_signal, gain
+    return target_signal / gain, gain
+
+
 def calculate_ber(transmitted_bits, received_bits):
     bit_count = min(len(transmitted_bits), len(received_bits))
     if bit_count == 0:

@@ -20,7 +20,8 @@ def generate_OFDMA_signal(Nfft, number_of_users, subcarriers_per_user, modulatio
         bits = bits.replace(" ", "")
         
         symbols = qam_mod(bits, modulation_order)
-        print("USER", user, "BITS:", bits)
+        print(f'[progress] Generated OFDMA user {user}: {len(bits)} bits',
+              flush=True)
 
         # Assign user symbols to contiguous subcarriers.
         complete_band[start:end] = symbols
