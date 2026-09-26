@@ -26,7 +26,6 @@ class ExperimentConfig:
     memory_line_count: int = 5
     selected_memory_line_count: int = 3
     lut_columns_per_line: tuple[int, ...] = (16, 12, 8, 4, 2)
-    enable_dpd: bool = False
 
     def __post_init__(self):
         if self.data_source != 'mat':

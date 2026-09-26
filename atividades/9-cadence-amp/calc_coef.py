@@ -101,7 +101,7 @@ def calcCoef(in_data, out_data, cfg):
         residuals,
         initial_real_coef,
         args=(in_data, out_data, cfg),
-        verbose=2,
+        verbose=0,
     )
     return _unpack_complex_coefficients(result.x, cfg)
 

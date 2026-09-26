@@ -1,8 +1,12 @@
 import os
+import logging
 from pathlib import Path
 import shlex
 import shutil
 import subprocess
+
+
+LOGGER = logging.getLogger('cadence_pa.spectre')
 
 
 def _remote_expression(path):
@@ -81,6 +85,9 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
     Path(control_path).parent.mkdir(parents=True, exist_ok=True)
     common_options = [
         '-o', f'Port={ssh_port}',
+        '-o', 'ConnectTimeout=15',
+        '-o', 'ServerAliveInterval=15',
+        '-o', 'ServerAliveCountMax=3',
         '-o', 'ControlMaster=auto',
         '-o', f'ControlPath={control_path}',
         '-o', 'ControlPersist=1h',
@@ -94,7 +101,7 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
         ssh_options += ['-i', expanded_key]
         scp_options += ['-i', expanded_key]
 
-    print(f'[progress] Connecting to {host}', flush=True)
+    LOGGER.info('Connecting to %s', host)
     prepare_command = (
         f'mkdir -p {remote_dir} {_remote_expression(remote_netlist_dir)} '
         f'{_remote_expression(input_directory)} && '
@@ -106,9 +113,14 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
             f' && cp {source_netlist} {transient_netlist}'
             f' && printf "\\ntran tran stop=20n maxstep=10p\\nsave IN_AMP OUT_AMP\\n" '
             f' >> {transient_netlist}')
-    subprocess.run(
-        ['ssh', *ssh_options, host, prepare_command],
-        check=True, text=True, timeout=30)
+    try:
+        subprocess.run(
+            ['ssh', *ssh_options, host, prepare_command],
+            check=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError(
+            f'SSH preparation on {host} timed out after 120 seconds. '
+            'Check the host, VPN/network access, and SSH control socket.') from error
 
     if not remote_netlist_path:
         subprocess.run(
@@ -125,7 +137,7 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
             ['scp', *scp_options, str(auxiliary_include),
              f'{host}:{remote_netlist_dir}/ade_e.scs'],
             check=True, text=True)
-    print('[progress] Input files uploaded; starting remote Spectre', flush=True)
+    LOGGER.info('Input files uploaded; starting remote Spectre')
 
     include_options = []
     for directory in include_directories:
@@ -143,10 +155,10 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
             'Remote Spectre simulation failed with exit code '
             f'{completed.returncode}.\n{completed.stdout}\n{completed.stderr}')
 
-    print('[progress] Remote Spectre completed; downloading results', flush=True)
+    LOGGER.info('Remote Spectre completed; downloading results')
     subprocess.run(
         ['scp', *scp_options, '-r', remote_output_scp,
          str(output_directory.parent)],
         check=True, text=True)
-    print(f'Remote Spectre simulation completed: {output_directory}')
+    LOGGER.info('Spectre results downloaded: %s', output_directory)
     return output_directory

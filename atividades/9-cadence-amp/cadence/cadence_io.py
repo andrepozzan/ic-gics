@@ -1,9 +1,13 @@
 from dataclasses import dataclass
+import logging
 from pathlib import Path
 import re
 
 import numpy as np
 from scipy.signal import hilbert
+
+
+LOGGER = logging.getLogger('cadence_pa.io')
 
 
 @dataclass(frozen=True)
@@ -66,7 +70,7 @@ def read_psfascii_transient(results_directory, input_trace='n_in',
                 rows.append((
                     float(time_value), values[input_trace], values[output_trace]))
         if rows:
-            print(f'[progress] Reading Spectre result: {result_file}', flush=True)
+            LOGGER.info('Reading Spectre result: %s', result_file)
             return np.asarray(rows, dtype=float).T
     raise FileNotFoundError(
         f'Could not find PSF ASCII traces {input_trace} and {output_trace} '

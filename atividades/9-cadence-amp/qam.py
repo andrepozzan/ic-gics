@@ -50,15 +50,11 @@ def qam_mod(bits, modulation_order):
     return np.array(symbols)
 
 def qam_demod(symbols, modulation_order):
-    
-    print("\n \n \n \n")
-    
     k = int(np.log2(modulation_order))
     k_half = k // 2
     n_levels = 2 ** k_half
 
     qam_levels = 2 * np.arange(n_levels) - (n_levels - 1)
-    print('qam_levels: ', qam_levels)
 
     # Inverse maps from detected PAM value to Gray index for each axis.
     inv_map_i = {}
@@ -76,7 +72,6 @@ def qam_demod(symbols, modulation_order):
     measured_power = np.mean(np.abs(symbols) ** 2)
     if measured_power > 0:
         gain = np.sqrt(ideal_symbol_power / measured_power)
-        print('gain: ', gain)
         symbols = symbols * gain
         
         
@@ -93,9 +88,7 @@ def qam_demod(symbols, modulation_order):
     minor_distance_q = np.argmin(np.abs(Q_column - qam_levels_row), axis=1)
 
     i_levels = qam_levels[minor_distance_i]
-    print('i_levels: ', i_levels)
     q_levels = qam_levels[minor_distance_q]
-    print('q_levels: ', q_levels)
 
     bits = []
     for i_level, q_level in zip(i_levels, q_levels):

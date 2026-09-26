@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+import logging
 
 import numpy as np
 
@@ -20,7 +21,6 @@ from evaluation import (
     calculate_ber,
     calculate_nmse,
     compensate_complex_gain,
-    group_bits,
 )
 from experiment_config import ExperimentConfig
 from experiment_plots import plot_static_am_am
@@ -31,10 +31,11 @@ from qam import qam_modulate_passband
 
 
 DEFAULT_CONFIG = ExperimentConfig()
+LOGGER = logging.getLogger('cadence_pa')
 
 
 def log_progress(message):
-    print(f'[progress] {message}', flush=True)
+    LOGGER.info(message)
 
 
 def scale_to_training_range(signal, training_signal):
@@ -66,20 +67,20 @@ def limit_signal_amplitude(signal, maximum_amplitude):
 
 
 def print_ber_report(transmitted_bits, received_bits):
-    print('Bits sent per user:')
-    for user_index, bits in enumerate(transmitted_bits):
-        print(f'User {user_index}: {group_bits(bits)}')
-
-    print('\nBits received per user:')
-    for user_index, bits in enumerate(received_bits):
-        print(f'User {user_index}: {group_bits(bits)}')
-
-    print('\nBER per user:')
+    LOGGER.info('BER summary (%d users, %d bits/user)',
+                len(transmitted_bits), len(transmitted_bits[0]))
+    total_errors = 0
+    total_bits = 0
     for user_index, (sent, received) in enumerate(
             zip(transmitted_bits, received_bits)):
         ber, errors, bit_count = calculate_ber(sent, received)
-        print(f'User {user_index}: BER = {ber * 100:.2f}% '
-              f'({errors}/{bit_count})')
+        total_errors += errors
+        total_bits += bit_count
+        LOGGER.info('  User %02d: %.2f%% (%d/%d errors)',
+                    user_index, ber * 100, errors, bit_count)
+    overall_ber = total_errors / total_bits if total_bits else 0.0
+    LOGGER.info('  Overall: %.2f%% (%d/%d errors)',
+                overall_ber * 100, total_errors, total_bits)
 
 
 def parse_arguments():
@@ -90,9 +91,6 @@ def parse_arguments():
     parser.add_argument(
         '--run-spectre', action='store_true',
         help='Run the Spectre netlist after exporting the input PWL signal')
-    parser.add_argument(
-        '--enable-dpd', action='store_true',
-        help='Enable the learned DPD model (disabled by default)')
     parser.add_argument(
         '--spectre-executable', default=None,
         help='Spectre executable path; defaults to SPECTRE or spectre')
@@ -118,11 +116,9 @@ def parse_arguments():
 
 
 def main():
+    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
     arguments = parse_arguments()
-    config = ExperimentConfig(
-        data_source=arguments.data_source,
-        enable_dpd=arguments.enable_dpd,
-    )
+    config = ExperimentConfig(data_source=arguments.data_source)
     log_progress('Starting experiment')
     if arguments.run_spectre:
         log_progress('Generating extraction stimulus')
@@ -190,16 +186,15 @@ def main():
     lut_config = create_lut_config(
         maximum_amplitude, config.lut_columns_per_line)
     selector = LUTLineSelector(
-        lut_config, config.selected_memory_line_count, verbose=2)
+        lut_config, config.selected_memory_line_count, verbose=0)
     selector.select(input_training, output_training)
     selected_model = selector.create_selected_model().fit(
         input_training, output_training)
     log_progress('PA model training completed')
 
-    print('LUT contributions:', selector.contributions)
-    print('Selected memory lines:', selector.selected_lines)
-    print('LUT coefficients:', lut_config.coefficient_count, '->',
-          selected_model.config.coefficient_count)
+    LOGGER.info('Selected memory lines: %s; coefficients: %d -> %d',
+                selector.selected_lines, lut_config.coefficient_count,
+                selected_model.config.coefficient_count)
 
     dpd_maximum_amplitude = np.percentile(np.abs(output_training), 99.9)
     dpd_lut_config = create_lut_config(
@@ -207,7 +202,7 @@ def main():
         config.lut_columns_per_line,
         active_lines=selector.selected_lines,
     )
-    dpd_model = VariableLUTModel(dpd_lut_config, verbose=2).fit(
+    dpd_model = VariableLUTModel(dpd_lut_config, verbose=0).fit(
         output_training, input_training)
     log_progress('DPD model training completed')
     log_progress('Generating test OFDMA signal')
@@ -221,17 +216,7 @@ def main():
 
     ideal_passband_signal, _ = qam_modulate_passband(
         ofdma_signal, config.carrier_frequency, config.sampling_rate)
-    desired_output_gain = estimate_small_signal_gain(
-        input_training, output_training)
-    desired_output = desired_output_gain * ofdma_signal
-    print(f'Desired small-signal gain: {desired_output_gain}', flush=True)
-    if config.enable_dpd:
-        dpd_output = dpd_model.predict(desired_output)
-        dpd_output = limit_signal_amplitude(
-            dpd_output, np.max(np.abs(input_training)))
-    else:
-        log_progress('DPD disabled; using the original PA input')
-        dpd_output = ofdma_signal
+    dpd_output = dpd_model.predict(ofdma_signal)
     predicted_amplifier_output = selected_model.predict(dpd_output)
     test_passband_signal, _ = qam_modulate_passband(
         dpd_output, config.carrier_frequency, config.sampling_rate)
@@ -277,8 +262,8 @@ def main():
     aligned_output, delay = align_by_delay(ofdma_signal, amplifier_output)
     aligned_output, complex_gain = compensate_complex_gain(
         ofdma_signal, aligned_output)
-    print(f'Complex gain compensated: {complex_gain}', flush=True)
-    print(f'OFDMA estimated delay (samples): {delay}')
+    LOGGER.info('Compensation gain: %s; estimated delay: %d samples',
+                complex_gain, delay)
     received_bits = extract_bits_from_ofdma(
         aligned_output,
         config.fft_size,
@@ -290,11 +275,12 @@ def main():
 
     log_progress('Calculating NMSE and generating plots')
     validation_output = selected_model.predict(input_validation)
-    print(f'NMSE: {calculate_nmse(output_validation, validation_output):.6f} dB')
+    LOGGER.info('Validation NMSE: %.6f dB',
+                calculate_nmse(output_validation, validation_output))
 
     plot_static_am_am(
         selected_model,
-        dpd_model if config.enable_dpd else None,
+        dpd_model,
         maximum_amplitude,
         selected_model.config.line_count,
     )
