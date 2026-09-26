@@ -204,16 +204,32 @@ def plot_histogram_amplitude(samples, n_lut_lines, n_lut_columns):
 
 
 def plot_am_am(amp_input, amp_output_dpd_block, amp_output_no_dpd, amp_output_dpd):
+    input_normalized = _normalize_amplitude(amp_input)
+    dpd_block_normalized = _normalize_amplitude(amp_output_dpd_block)
+    no_dpd_normalized = _normalize_amplitude(amp_output_no_dpd)
+    dpd_normalized = _normalize_amplitude(amp_output_dpd)
+
     plt.figure(figsize=(20, 9))
-    plt.scatter(amp_input, amp_output_dpd_block, s=80, label='DPD output', alpha=0.8)
-    plt.scatter(amp_input, amp_output_no_dpd, s=80, label='PA without DPD', alpha=0.8)
-    plt.scatter(amp_input, amp_output_dpd, s=80, label='PA with DPD (Cascade)', alpha=0.8)
-    lim = np.max(amp_input)
-    plt.plot([0, lim], [0, lim], 'r--', label='Linear Reference', linewidth=2)
-    plt.xlabel('Input Amplitude', fontsize=30)
-    plt.ylabel('Output Amplitude', fontsize=30)
-    plt.title('AM-AM Plot', fontsize=22)
+    plt.scatter(input_normalized, dpd_block_normalized, s=45,
+                label='DPD output', alpha=0.55)
+    plt.scatter(input_normalized, no_dpd_normalized, s=45,
+                label='PA without DPD', alpha=0.55)
+    plt.scatter(input_normalized, dpd_normalized, s=45,
+                label='PA with DPD (Cascade)', alpha=0.55)
+    plt.plot([0, 1], [0, 1], 'r--', label='Linear reference', linewidth=2)
+    plt.xlabel('Normalized input amplitude', fontsize=24)
+    plt.ylabel('Normalized output amplitude', fontsize=24)
+    plt.title('Normalized AM-AM response', fontsize=22)
+    plt.xlim(0, 1.02)
+    plt.ylim(0, 1.02)
     plt.legend(fontsize=20)
     plt.grid()
     plt.tick_params(axis='both', which='major', labelsize=18)
     plt.show()
+
+
+def _normalize_amplitude(amplitude):
+    maximum = np.max(amplitude) if len(amplitude) else 0.0
+    if maximum <= 0:
+        return amplitude
+    return amplitude / maximum
