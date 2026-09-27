@@ -23,7 +23,8 @@ def run_spectre_simulation(netlist_path, spectre_executable=None,
                            ssh_control_path='~/.ssh/sockets/%r@%h-%p',
                            remote_include_directories=None,
                            remote_netlist_path=None,
-                           remote_input_directory=None):
+                           remote_input_directory=None, max_step=1e-12,
+                           stop_time=None, save_traces=('IN_AMP', 'OUT_AMP')):
     netlist_path = Path(netlist_path).resolve()
     output_directory = Path(
         output_directory or netlist_path.parent / 'spectre_run')
@@ -50,6 +51,9 @@ def run_spectre_simulation(netlist_path, spectre_executable=None,
         remote_include_directories or ('~/simulation',),
         remote_netlist_path,
         remote_input_directory,
+        max_step,
+        stop_time,
+        save_traces,
     )
 
 
@@ -57,7 +61,8 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
                         ssh_host, ssh_user, remote_directory,
                         setup_command, input_pwl_path, ssh_key, ssh_port,
                         ssh_control_path, include_directories,
-                        remote_netlist_path, remote_input_directory):
+                        remote_netlist_path, remote_input_directory,
+                        max_step, stop_time, save_traces):
     host = f'{ssh_user}@{ssh_host}' if ssh_user else ssh_host
     remote_dir = _remote_expression(remote_directory)
     input_directory = remote_input_directory or remote_directory
@@ -107,11 +112,14 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
         f'{_remote_expression(input_directory)} && '
         f'rm -rf {remote_dir}/spectre_run')
     if remote_netlist_path:
+        stop_expression = f'{stop_time:g}' if stop_time is not None else '20n'
         source_netlist = f'{netlist_workdir}/{shlex.quote(remote_netlist_name)}'
         transient_netlist = f'{netlist_workdir}/{simulation_netlist_name}'
         prepare_command += (
             f' && cp {source_netlist} {transient_netlist}'
-            f' && printf "\\ntran tran stop=20n maxstep=10p\\nsave IN_AMP OUT_AMP\\n" '
+            f' && printf "\\ntran tran stop={stop_expression} '
+            f'maxstep={max_step:g}\\nsave {save_traces[0]} '
+            f'{save_traces[1]}\\n" '
             f' >> {transient_netlist}')
     try:
         subprocess.run(
@@ -127,10 +135,15 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
             ['scp', *scp_options, str(netlist_path), remote_target],
             check=True, text=True)
 
-    subprocess.run(
-        ['scp', *scp_options, str(local_input),
-         f'{host}:{input_directory}/sinal_entrada_cadence.pwl'],
-        check=True, text=True)
+    upload_targets = {
+        f'{host}:{netlist_workdir}/sinal_entrada_cadence.pwl',
+        f'{host}:{remote_dir}/sinal_entrada_cadence.pwl',
+        f'{host}:{input_directory}/sinal_entrada_cadence.pwl',
+    }
+    for target in sorted(upload_targets):
+        subprocess.run(
+            ['scp', *scp_options, str(local_input), target],
+            check=True, text=True)
 
     if auxiliary_include.is_file():
         subprocess.run(

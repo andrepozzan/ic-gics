@@ -17,11 +17,14 @@ class ExperimentConfig:
         '~/cadence/gpdk045',
         '~/cadence/gpdk045/simulacao',
     )
-    carrier_frequency: float = 26e9
+    # carrier_frequency: float = 26e9
+    carrier_frequency: float = 0.5e9
     sampling_rate: float = 104e9
-    number_of_users: int = 10
-    subcarriers_per_user: int = 48
-    modulation_order: int = 256
+    spectre_max_step: float = 2.5e-12
+    startup_settling_time: float = 1e-9
+    number_of_users: int = 4
+    subcarriers_per_user: int = 12
+    modulation_order: int = 16
     fft_size: int = 2048
     memory_line_count: int = 5
     selected_memory_line_count: int = 3
@@ -32,3 +35,7 @@ class ExperimentConfig:
             raise ValueError("data_source must be 'mat'")
         if len(self.lut_columns_per_line) != self.memory_line_count:
             raise ValueError('One LUT size is required per memory line')
+        if self.spectre_max_step <= 0:
+            raise ValueError('spectre_max_step must be positive')
+        if self.startup_settling_time < 0:
+            raise ValueError('startup_settling_time must not be negative')

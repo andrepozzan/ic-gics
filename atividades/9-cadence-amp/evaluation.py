@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.signal import correlate
+from scipy.optimize import minimize_scalar
 
 
 def calculate_nmse(reference_signal, estimated_signal):
@@ -15,9 +16,37 @@ def estimate_integer_delay(reference_signal, target_signal):
     return int(lags[np.argmax(np.abs(correlation))])
 
 
+def estimate_fractional_delay(reference_signal, target_signal):
+    correlation = correlate(
+        target_signal, reference_signal, mode='full', method='fft')
+    lags = np.arange(-len(reference_signal) + 1, len(target_signal))
+    peak_index = int(np.argmax(np.abs(correlation)))
+    integer_delay = float(lags[peak_index])
+    if len(reference_signal) != len(target_signal):
+        return integer_delay
+
+    def negative_correlation(delay):
+        aligned = fractional_shift(target_signal, -delay)
+        return -abs(np.vdot(reference_signal, aligned))
+
+    result = minimize_scalar(
+        negative_correlation,
+        bounds=(integer_delay - 0.5, integer_delay + 0.5),
+        method='bounded',
+        options={'xatol': 1e-3},
+    )
+    return float(result.x)
+
+
+def fractional_shift(signal, shift):
+    frequencies = np.fft.fftfreq(len(signal))
+    spectrum = np.fft.fft(signal)
+    return np.fft.ifft(spectrum * np.exp(-2j * np.pi * frequencies * shift))
+
+
 def align_by_delay(reference_signal, target_signal):
-    delay = estimate_integer_delay(reference_signal, target_signal)
-    return np.roll(target_signal, -delay), delay
+    delay = estimate_fractional_delay(reference_signal, target_signal)
+    return fractional_shift(target_signal, -delay), delay
 
 
 def compensate_complex_gain(reference_signal, target_signal):

@@ -85,6 +85,20 @@ Execute:
 python3 script-9-cadence.py --run-spectre
 ```
 
+## Validacao com N-port
+
+Para testar o pipeline sem usar o Doherty transistor-level, use o modelo
+comportamental local `cadence/Sim_Nport_1.scs`:
+
+```bash
+python3 script-9-cadence.py --cadence-validation
+```
+
+Esse modo envia o `Sim_Nport_1.scs` para o diretorio remoto, executa as duas
+simulacoes e le `n_in`/`n_out`. O modo `--run-spectre` continua usando o
+testbench Doherty e os traces configurados para ele. As duas opcoes sao
+mutuamente exclusivas.
+
 Ou informe a chave diretamente:
 
 ```bash

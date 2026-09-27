@@ -1,1 +1,7 @@
 *.envlp
+*.pwl
+*.csv
+.envlp
+spectre_run/
+/spectre_run
+.pwl

@@ -5,8 +5,8 @@ import logging
 import numpy as np
 
 BASE_PATH = Path(__file__).parent
-PROJECT_PATH = BASE_PATH
 NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Doherty_1.scs'
+NPORT_NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Nport_1.scs'
 
 from cadence.cadence_runner import run_spectre_simulation
 from cadence.cadence_io import (
@@ -23,7 +23,7 @@ from evaluation import (
     compensate_complex_gain,
 )
 from experiment_config import ExperimentConfig
-from experiment_plots import plot_static_am_am
+from experiment_plots import plot_static_am_am, plot_training_am_am
 from lut_model import LUTLineSelector, VariableLUTModel, create_lut_config
 from ofdma import extract_bits_from_ofdma, generate_OFDMA_signal
 from plotting import plot_psd_comparison
@@ -66,6 +66,21 @@ def limit_signal_amplitude(signal, maximum_amplitude):
     return signal * scale
 
 
+def add_guard_prefix(signal, config):
+    settling_samples = int(np.ceil(
+        config.startup_settling_time * config.sampling_rate))
+    if settling_samples <= 0:
+        return signal, 0
+    prefix = signal[-settling_samples:]
+    return np.concatenate((prefix, signal)), settling_samples
+
+
+def remove_guard_prefix(time_vector, signal, settling_samples):
+    if settling_samples <= 0:
+        return time_vector, signal
+    return time_vector[settling_samples:], signal[settling_samples:]
+
+
 def print_ber_report(transmitted_bits, received_bits):
     LOGGER.info('BER summary (%d users, %d bits/user)',
                 len(transmitted_bits), len(transmitted_bits[0]))
@@ -92,6 +107,9 @@ def parse_arguments():
         '--run-spectre', action='store_true',
         help='Run the Spectre netlist after exporting the input PWL signal')
     parser.add_argument(
+        '--cadence-validation', action='store_true',
+        help='Validate the DPD pipeline with the local behavioral N-port PA')
+    parser.add_argument(
         '--spectre-executable', default=None,
         help='Spectre executable path; defaults to SPECTRE or spectre')
     parser.add_argument(
@@ -110,8 +128,10 @@ def parse_arguments():
         '--remote-setup-command', default=None,
         help='Remote setup command; defaults to source ~/cadence/gpdk045/cds')
     arguments = parser.parse_args()
-    if arguments.run_spectre and not arguments.ssh_host:
-        parser.error('--run-spectre requires --ssh-host or a configured host')
+    if (arguments.run_spectre or arguments.cadence_validation) and not arguments.ssh_host:
+        parser.error('--run-spectre/--cadence-validation requires --ssh-host or a configured host')
+    if arguments.run_spectre and arguments.cadence_validation:
+        parser.error('choose either --run-spectre or --cadence-validation')
     return arguments
 
 
@@ -119,8 +139,14 @@ def main():
     logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
     arguments = parse_arguments()
     config = ExperimentConfig(data_source=arguments.data_source)
+    cadence_validation = arguments.cadence_validation
+    cadence_netlist = NPORT_NETLIST_PATH if cadence_validation else NETLIST_PATH
+    cadence_remote_netlist = None
+    cadence_input_trace = 'n_in'
+    cadence_output_trace = 'n_out'
     log_progress('Starting experiment')
-    if arguments.run_spectre:
+
+    if arguments.run_spectre or cadence_validation:
         log_progress('Generating extraction stimulus')
         np.random.seed(7)
         extraction_signal, _ = generate_OFDMA_signal(
@@ -131,14 +157,16 @@ def main():
         )
         extraction_signal = (
             extraction_signal / np.max(np.abs(extraction_signal)) * 0.04)
+        extraction_signal_tx, extraction_guard_samples = add_guard_prefix(
+            extraction_signal, config)
         extraction_passband, extraction_time = qam_modulate_passband(
-            extraction_signal, config.carrier_frequency, config.sampling_rate)
+            extraction_signal_tx, config.carrier_frequency, config.sampling_rate)
         extraction_pwl = BASE_PATH / 'cadence' / 'training_input.pwl'
         export_pwl_signal(
             extraction_passband, config.sampling_rate, extraction_pwl)
         log_progress('Running first Spectre simulation')
         extraction_results = run_spectre_simulation(
-            NETLIST_PATH,
+            cadence_netlist,
             output_directory=BASE_PATH / 'cadence' / 'spectre_run',
             spectre_executable=arguments.spectre_executable,
             ssh_host=arguments.ssh_host,
@@ -150,21 +178,36 @@ def main():
             ssh_port=config.cadence_ssh_port,
             ssh_control_path=config.cadence_ssh_control_path,
             remote_include_directories=config.cadence_remote_include_directories,
-            remote_netlist_path=config.cadence_remote_netlist,
+            remote_netlist_path=cadence_remote_netlist,
             remote_input_directory=config.cadence_remote_input_directory,
+            max_step=config.spectre_max_step,
+            stop_time=len(extraction_passband) / config.sampling_rate,
+            save_traces=(cadence_input_trace, cadence_output_trace),
         )
         log_progress('Reading first Spectre results')
+
         raw_result_time, result_input, result_output = read_psfascii_transient(
-            extraction_results, input_trace='IN_AMP', output_trace='OUT_AMP')
+            extraction_results, input_trace=cadence_input_trace,
+            output_trace=cadence_output_trace)
         result_time, result_input = resample_trace(
-            raw_result_time, result_input, config.sampling_rate)
+            raw_result_time, result_input, config.sampling_rate,
+            sample_count=len(extraction_passband))
         _, result_output = resample_trace(
             raw_result_time, result_output, config.sampling_rate,
-            sample_count=len(result_input))
+            sample_count=len(extraction_passband))
         input_baseband = passband_to_complex_baseband(
             result_input, result_time, config.carrier_frequency)
         output_baseband = passband_to_complex_baseband(
             result_output, result_time, config.carrier_frequency)
+        if extraction_guard_samples > 0:
+            input_baseband = input_baseband[extraction_guard_samples:]
+            output_baseband = output_baseband[extraction_guard_samples:]
+        output_baseband, extraction_delay = align_by_delay(
+            input_baseband, output_baseband)
+        output_baseband, extraction_gain = compensate_complex_gain(
+            input_baseband, output_baseband)
+        LOGGER.info('Training alignment: delay %.3f samples; gain %s',
+                    extraction_delay, extraction_gain)
         split_index = len(input_baseband) // 2
         input_training = input_baseband[:split_index]
         output_training = output_baseband[:split_index]
@@ -173,13 +216,20 @@ def main():
         log_progress(f'Loaded {len(input_training)} extraction samples')
     else:
         dataset = load_mat_dataset(
-            PROJECT_PATH / 'dados' / 'pa_sync_extraction.mat',
-            PROJECT_PATH / 'dados' / 'pa_sync_validation.mat',
+            BASE_PATH / 'dados' / 'pa_sync_extraction.mat',
+            BASE_PATH / 'dados' / 'pa_sync_validation.mat',
         )
         input_training = dataset.input_training
         output_training = dataset.output_training
         input_validation = dataset.input_validation
         output_validation = dataset.output_validation
+        output_training, mat_delay = align_by_delay(
+            input_training, output_training)
+        output_training, mat_gain = compensate_complex_gain(
+            input_training, output_training)
+        output_validation = output_validation / mat_gain
+        LOGGER.info('MAT alignment: delay %.3f samples; gain %s',
+                    mat_delay, mat_gain)
 
     log_progress('Training variable LUT model')
     maximum_amplitude = np.percentile(np.abs(input_training), 99.9)
@@ -202,10 +252,13 @@ def main():
         config.lut_columns_per_line,
         active_lines=selector.selected_lines,
     )
+
     dpd_model = VariableLUTModel(dpd_lut_config, verbose=0).fit(
         output_training, input_training)
+    
     log_progress('DPD model training completed')
     log_progress('Generating test OFDMA signal')
+
     ofdma_signal, transmitted_bits = generate_OFDMA_signal(
         config.fft_size,
         config.number_of_users,
@@ -218,8 +271,10 @@ def main():
         ofdma_signal, config.carrier_frequency, config.sampling_rate)
     dpd_output = dpd_model.predict(ofdma_signal)
     predicted_amplifier_output = selected_model.predict(dpd_output)
+    dpd_output_tx, test_guard_samples = add_guard_prefix(
+        dpd_output, config)
     test_passband_signal, _ = qam_modulate_passband(
-        dpd_output, config.carrier_frequency, config.sampling_rate)
+        dpd_output_tx, config.carrier_frequency, config.sampling_rate)
 
     export_pwl_signal(
         test_passband_signal, config.sampling_rate,
@@ -228,10 +283,10 @@ def main():
         test_passband_signal, config.sampling_rate,
         BASE_PATH / 'cadence' / 'sinal_entrada_cadence.pwl')
 
-    if arguments.run_spectre:
+    if arguments.run_spectre or cadence_validation:
         log_progress('Running second Spectre simulation')
         test_results = run_spectre_simulation(
-            NETLIST_PATH,
+            cadence_netlist,
             output_directory=BASE_PATH / 'cadence' / 'spectre_run',
             spectre_executable=arguments.spectre_executable,
             ssh_host=arguments.ssh_host,
@@ -243,17 +298,26 @@ def main():
             ssh_port=config.cadence_ssh_port,
             ssh_control_path=config.cadence_ssh_control_path,
             remote_include_directories=config.cadence_remote_include_directories,
-            remote_netlist_path=config.cadence_remote_netlist,
+            remote_netlist_path=cadence_remote_netlist,
             remote_input_directory=config.cadence_remote_input_directory,
+            max_step=config.spectre_max_step,
+            stop_time=len(test_passband_signal) / config.sampling_rate,
+            save_traces=(cadence_input_trace, cadence_output_trace),
         )
         log_progress('Reading second Spectre results')
-        test_time, _, test_output = read_psfascii_transient(
-            test_results, input_trace='IN_AMP', output_trace='OUT_AMP')
-        test_time, test_output = resample_trace(
-            test_time, test_output, config.sampling_rate,
-            sample_count=len(ofdma_signal))
+        raw_test_time, test_input, test_output = read_psfascii_transient(
+            test_results, input_trace=cadence_input_trace,
+            output_trace=cadence_output_trace)
+        test_time, test_input = resample_trace(
+            raw_test_time, test_input, config.sampling_rate,
+            sample_count=len(test_passband_signal))
+        _, test_output = resample_trace(
+            raw_test_time, test_output, config.sampling_rate,
+            sample_count=len(test_passband_signal))
         amplifier_output = passband_to_complex_baseband(
             test_output, test_time, config.carrier_frequency)
+        if test_guard_samples > 0:
+            amplifier_output = amplifier_output[test_guard_samples:]
         log_progress('Real Spectre output loaded')
     else:
         amplifier_output = predicted_amplifier_output
@@ -262,7 +326,7 @@ def main():
     aligned_output, delay = align_by_delay(ofdma_signal, amplifier_output)
     aligned_output, complex_gain = compensate_complex_gain(
         ofdma_signal, aligned_output)
-    LOGGER.info('Compensation gain: %s; estimated delay: %d samples',
+    LOGGER.info('Compensation gain: %s; estimated delay: %.3f samples',
                 complex_gain, delay)
     received_bits = extract_bits_from_ofdma(
         aligned_output,
@@ -277,6 +341,8 @@ def main():
     validation_output = selected_model.predict(input_validation)
     LOGGER.info('Validation NMSE: %.6f dB',
                 calculate_nmse(output_validation, validation_output))
+
+    plot_training_am_am(input_training, output_training)
 
     plot_static_am_am(
         selected_model,

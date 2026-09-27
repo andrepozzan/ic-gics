@@ -5,8 +5,8 @@ simulator lang=spectre
 include "/grad/GRR20243424/cadence/gpdk045/simulacao/doherty-amp.scs"
 
 parameters input_file="sinal_entrada_cadence.pwl"
-parameters tstop=20n
-parameters maxstep=10p
+parameters tstop=25n
+parameters maxstep=2.5p
 parameters v_bias=2.8
 parameters v_gate1=0.65
 parameters v_gate2=0.25
@@ -27,8 +27,7 @@ VGATE2 (gate2 0) vsource dc=v_gate2
 // RF_IN RF_OUT V_B1 V_B2 V_G1 V_G2.
 XDUT (n_in n_out bias1 bias1 gate1 gate2) _sub0
 
-// 50-ohm output load.
-RLOAD (n_out 0) resistor r=50
+// RLOAD (n_out 0) resistor r=50
 
 tran tran stop=tstop maxstep=maxstep
 save n_in n_out
