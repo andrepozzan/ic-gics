@@ -59,6 +59,26 @@ def compensate_complex_gain(reference_signal, target_signal):
     return target_signal / gain, gain
 
 
+def calculate_evm(reference_symbols, measured_symbols):
+    reference_symbols = np.asarray(reference_symbols, dtype=complex)
+    measured_symbols = np.asarray(measured_symbols, dtype=complex)
+    sample_count = min(len(reference_symbols), len(measured_symbols))
+    if sample_count == 0:
+        raise ValueError('Cannot calculate EVM without symbols')
+    reference_symbols = reference_symbols[:sample_count]
+    measured_symbols = measured_symbols[:sample_count]
+    corrected_symbols, gain = compensate_complex_gain(
+        reference_symbols, measured_symbols)
+    error = corrected_symbols - reference_symbols
+    reference_rms = np.sqrt(np.mean(np.abs(reference_symbols) ** 2))
+    if reference_rms == 0:
+        raise ValueError('Cannot calculate EVM for zero reference power')
+    evm_ratio = np.sqrt(np.mean(np.abs(error) ** 2)) / reference_rms
+    evm_percent = 100.0 * evm_ratio
+    evm_db = 20.0 * np.log10(max(evm_ratio, np.finfo(float).tiny))
+    return evm_ratio, evm_percent, evm_db, gain
+
+
 def calculate_ber(transmitted_bits, received_bits):
     bit_count = min(len(transmitted_bits), len(received_bits))
     if bit_count == 0:

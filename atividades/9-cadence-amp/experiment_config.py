@@ -22,6 +22,7 @@ class ExperimentConfig:
     spectre_max_step: float = 1e-12
     baseband_bandwidth: float = 3e9
     startup_settling_time: float = 1e-9
+    input_backoff_db: float = 6.0
     number_of_users: int = 4
     subcarriers_per_user: int = 12
     modulation_order: int = 16
@@ -41,3 +42,5 @@ class ExperimentConfig:
             raise ValueError('baseband_bandwidth must be below Nyquist')
         if self.startup_settling_time < 0:
             raise ValueError('startup_settling_time must not be negative')
+        if self.input_backoff_db < 0:
+            raise ValueError('input_backoff_db must not be negative')

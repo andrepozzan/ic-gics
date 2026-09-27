@@ -66,8 +66,15 @@ O testbench usa os bias observados no netlist `SIMUL-amp`: `VDD=3.3 V`, `V_B1=V_
 O fluxo usa `fc=26 GHz`, `fs=104 GHz`, `maxstep=1 ps` e
 `strobeperiod=1/fs`. O sinal possui 48 subportadoras contiguas, portanto a
 conversao para banda-base aplica um passa-baixas de 3 GHz depois da demodulacao
-analitica. O prefixo de 1 ns usado pelo script e removido antes do alinhamento,
+analitica. O script aplica `input_backoff_db=6 dB` tanto na extração quanto no
+sinal de teste antes de gerar o PWL, reduzindo o pico de tensão por um fator
+0,501187 e preservando margem para a PAPR do OFDMA. O prefixo de 1 ns usado pelo script e removido antes do alinhamento,
 evitando treinar com o transiente de carga dos capacitores de bloqueio.
+
+Além de BER e NMSE, o log da execução registra o EVM percentual e em dB. O EVM
+usa os símbolos QAM transmitidos como referência e corrige previamente ganho e
+rotação de fase constantes. O valor em dB usa a razão RMS (não o número
+percentual), de modo que limites como `-18,1 dB` sejam comparáveis às normas.
 
 O arquivo `ade_e.scs` auxiliar tambem e enviado automaticamente para
 `~/simulation`.

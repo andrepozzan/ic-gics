@@ -22,15 +22,20 @@ from cadence.cadence_io import (
 from evaluation import (
     align_by_delay,
     calculate_ber,
+    calculate_evm,
     calculate_nmse,
     compensate_complex_gain,
 )
 from experiment_config import ExperimentConfig
 from experiment_plots import plot_static_am_am, plot_training_am_am
 from lut_model import LUTLineSelector, VariableLUTModel, create_lut_config
-from ofdma import extract_bits_from_ofdma, generate_OFDMA_signal
+from ofdma import (
+    extract_bits_from_ofdma,
+    extract_symbols_from_ofdma,
+    generate_OFDMA_signal,
+)
 from plotting import plot_psd_comparison
-from qam import qam_modulate_passband
+from qam import qam_mod, qam_modulate_passband
 
 
 DEFAULT_CONFIG = ExperimentConfig()
@@ -67,6 +72,10 @@ def limit_signal_amplitude(signal, maximum_amplitude):
     nonzero = amplitude > maximum_amplitude
     scale[nonzero] = maximum_amplitude / amplitude[nonzero]
     return signal * scale
+
+
+def apply_input_backoff(signal, backoff_db):
+    return signal * 10 ** (-backoff_db / 20.0)
 
 
 def add_guard_prefix(signal, config):
@@ -154,6 +163,9 @@ def main():
         force=True,
     )
     config = ExperimentConfig(data_source=arguments.data_source)
+    LOGGER.info('Input back-off: %.2f dB (linear voltage scale %.6f)',
+                config.input_backoff_db,
+                10 ** (-config.input_backoff_db / 20.0))
     cadence_validation = arguments.cadence_validation
     cadence_netlist = NPORT_NETLIST_PATH if cadence_validation else NETLIST_PATH
     cadence_remote_netlist = None
@@ -172,6 +184,8 @@ def main():
         )
         extraction_signal = (
             extraction_signal / np.max(np.abs(extraction_signal)) * 0.04)
+        extraction_signal = apply_input_backoff(
+            extraction_signal, config.input_backoff_db)
         extraction_signal_tx, extraction_guard_samples = add_guard_prefix(
             extraction_signal, config)
         extraction_passband, extraction_time = qam_modulate_passband(
@@ -286,6 +300,8 @@ def main():
         config.modulation_order,
     )
     ofdma_signal = scale_to_training_range(ofdma_signal, input_training)
+    ofdma_signal = apply_input_backoff(
+        ofdma_signal, config.input_backoff_db)
 
     ideal_passband_signal, _ = qam_modulate_passband(
         ofdma_signal, config.carrier_frequency, config.sampling_rate)
@@ -360,6 +376,21 @@ def main():
         config.modulation_order,
     )
     print_ber_report(transmitted_bits, received_bits)
+    reference_symbols = np.concatenate([
+        qam_mod(bits, config.modulation_order)
+        for bits in transmitted_bits
+    ])
+    measured_symbols = np.concatenate(
+        extract_symbols_from_ofdma(
+            aligned_output,
+            config.fft_size,
+            config.number_of_users,
+            config.subcarriers_per_user,
+        ))
+    _, evm_percent, evm_db, evm_gain = calculate_evm(
+        reference_symbols, measured_symbols)
+    LOGGER.info('EVM: %.4f%% (%.4f dB), correction gain: %s',
+                evm_percent, evm_db, evm_gain)
 
     log_progress('Calculating NMSE and generating plots')
     validation_output = selected_model.predict(input_validation)
