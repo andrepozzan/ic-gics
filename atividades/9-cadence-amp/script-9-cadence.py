@@ -1,6 +1,7 @@
 from pathlib import Path
 import argparse
 import logging
+import shutil
 
 import numpy as np
 
@@ -8,6 +9,7 @@ BASE_PATH = Path(__file__).parent
 NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Doherty_1.scs'
 NPORT_NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Nport_1.scs'
 DOHERTY_SUBCKT_PATH = BASE_PATH / 'cadence' / 'doherty-amp.scs'
+LAST_EXECUTION_DIR = BASE_PATH / 'cadence' / 'ultima_execucao'
 
 from cadence.cadence_runner import run_spectre_simulation
 from cadence.cadence_io import (
@@ -137,8 +139,20 @@ def parse_arguments():
 
 
 def main():
-    logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
     arguments = parse_arguments()
+    if LAST_EXECUTION_DIR.exists():
+        shutil.rmtree(LAST_EXECUTION_DIR)
+    LAST_EXECUTION_DIR.mkdir(parents=True)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='[%(asctime)s] [%(levelname)s] %(message)s',
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(LAST_EXECUTION_DIR / 'execution.log',
+                                mode='w', encoding='utf-8'),
+        ],
+        force=True,
+    )
     config = ExperimentConfig(data_source=arguments.data_source)
     cadence_validation = arguments.cadence_validation
     cadence_netlist = NPORT_NETLIST_PATH if cadence_validation else NETLIST_PATH
@@ -352,17 +366,20 @@ def main():
     LOGGER.info('Validation NMSE: %.6f dB',
                 calculate_nmse(output_validation, validation_output))
 
-    plot_training_am_am(input_training, output_training)
+    plot_training_am_am(input_training, output_training,
+                        output_dir=LAST_EXECUTION_DIR)
 
     plot_static_am_am(
         selected_model,
         dpd_model,
         maximum_amplitude,
         selected_model.config.line_count,
+        output_dir=LAST_EXECUTION_DIR,
     )
     no_dpd_output = selected_model.predict(ofdma_signal)
     plot_psd_comparison(
-        ofdma_signal, no_dpd_output, amplifier_output, config.sampling_rate)
+        ofdma_signal, no_dpd_output, amplifier_output, config.sampling_rate,
+        output_dir=LAST_EXECUTION_DIR)
 
 
 if __name__ == '__main__':

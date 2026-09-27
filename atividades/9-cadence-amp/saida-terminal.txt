@@ -9,11 +9,11 @@
 [INFO] Spectre results downloaded: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run
 [INFO] Reading first Spectre results
 [INFO] Reading Spectre result: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run/tran.tran.tran
-[INFO] Training alignment: delay 6.332 samples; gain (2.9756139779227797-0.49936277649008537j)
+[INFO] Training alignment: delay 6.403 samples; gain (3.1171395247669462-0.4818204396837376j)
 [INFO] Loaded 1024 extraction samples
 [INFO] Training variable LUT model
 [INFO] PA model training completed
-[INFO] Selected memory lines: (1, 3, 4); coefficients: 84 -> 36
+[INFO] Selected memory lines: (0, 1, 3); coefficients: 84 -> 64
 [INFO] DPD model training completed
 [INFO] Generating test OFDMA signal
 [INFO] Running second Spectre simulation
@@ -25,12 +25,12 @@
 [INFO] Reading Spectre result: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run/tran.tran.tran
 [INFO] Real Spectre output loaded
 [INFO] Calculating BER
-[INFO] Compensation gain: (1.3654015139683733+0.2290052563741114j); estimated delay: 7.629 samples
-[INFO] BER summary (4 users, 96 bits/user)
-[INFO]   User 00: 2.08% (2/96 errors)
-[INFO]   User 01: 10.42% (10/96 errors)
-[INFO]   User 02: 16.67% (16/96 errors)
-[INFO]   User 03: 3.12% (3/96 errors)
-[INFO]   Overall: 8.07% (31/384 errors)
+[INFO] Compensation gain: (1.4175597693762632+0.2366465826096294j); estimated delay: 7.500 samples
+[INFO] BER summary (4 users, 48 bits/user)
+[INFO]   User 00: 0.00% (0/48 errors)
+[INFO]   User 01: 0.00% (0/48 errors)
+[INFO]   User 02: 0.00% (0/48 errors)
+[INFO]   User 03: 0.00% (0/48 errors)
+[INFO]   Overall: 0.00% (0/192 errors)
 [INFO] Calculating NMSE and generating plots
-[INFO] Validation NMSE: -22.815834 dB
+[INFO] Validation NMSE: -21.093464 dB

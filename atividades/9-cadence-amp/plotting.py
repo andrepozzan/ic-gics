@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 from qam import qam_mod
 
@@ -67,7 +68,9 @@ def calculate_psd(signal, fs):
     return freq, psd_db
 
 
-def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs):
+def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs,
+                        output_dir=None):
+    output_dir = Path(output_dir) if output_dir is not None else None
     freq_in, psd_in = calculate_psd(ofdma_signal, fs)
     freq_no_dpd, psd_no_dpd = calculate_psd(out_no_dpd, fs)
     freq_with_dpd, psd_with_dpd = calculate_psd(out_with_dpd, fs)
@@ -78,7 +81,7 @@ def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs):
         np.max(psd_with_dpd) if psd_with_dpd.size else -np.inf,
     ])
 
-    plt.figure(figsize=(10, 7))
+    figure = plt.figure(figsize=(10, 7))
     plt.plot(freq_in / 1e6, psd_in - psd_reference,
              color='black', label='Input signal', linewidth=2.5, zorder=1)
     plt.plot(freq_with_dpd / 1e6, psd_with_dpd - psd_reference,
@@ -96,7 +99,18 @@ def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs):
 
     plt.tick_params(axis='both', which='major', labelsize=10)
     plt.tight_layout()
-    plt.show()
+    if output_dir is not None:
+        np.savetxt(
+            output_dir / 'psd_comparison.csv',
+            np.column_stack((freq_in, psd_in - psd_reference,
+                             psd_no_dpd - psd_reference,
+                             psd_with_dpd - psd_reference)),
+            delimiter=',',
+            header='frequency_hz,input_db,no_dpd_db,with_dpd_db',
+            comments='')
+        figure.savefig(output_dir / 'psd_comparison.png',
+                       dpi=150, bbox_inches='tight')
+    plt.close(figure)
 
 
 def split_bits_by_symbol(bit_string, bits_per_symbol):

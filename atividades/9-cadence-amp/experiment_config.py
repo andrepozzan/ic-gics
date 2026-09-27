@@ -24,7 +24,7 @@ class ExperimentConfig:
     startup_settling_time: float = 1e-9
     number_of_users: int = 4
     subcarriers_per_user: int = 12
-    modulation_order: int = 256
+    modulation_order: int = 16
     fft_size: int = 2048
     memory_line_count: int = 5
     selected_memory_line_count: int = 3
