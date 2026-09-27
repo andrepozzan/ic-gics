@@ -37,8 +37,6 @@ Host analog2
 	ControlMaster auto
 	ControlPath ~/.ssh/sockets/%r@%h-%p
 	ControlPersist 1h
-	ForwardX11 yes
-	ForwardX11Trusted yes
 	Compression yes
 ```
 
@@ -47,6 +45,10 @@ O setup remoto padrao e:
 ```bash
 source ~/cadence/gpdk045/cds
 ```
+
+O runner chama diretamente o executavel de linha de comando `spectre` e usa
+SSH sem encaminhamento X11/Agent. Ele nao inicia `virtuoso`, `adexl`, `maestro`
+ou ADE; a simulacao roda em modo batch e nao deve abrir janelas graficas.
 
 ## Testbench Doherty
 

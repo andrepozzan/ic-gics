@@ -9,6 +9,14 @@ import subprocess
 LOGGER = logging.getLogger('cadence_pa.spectre')
 
 
+def _validate_spectre_executable(executable):
+    executable_name = Path(executable).name.lower()
+    if executable_name in {'virtuoso', 'adexl', 'maestro', 'ade'}:
+        raise ValueError(
+            f'Graphical Cadence executable is not supported: {executable}. '
+            'Use the command-line spectre executable.')
+
+
 def _remote_expression(path):
     if path.startswith('~/'):
         return '$HOME/' + shlex.quote(path[2:])
@@ -34,6 +42,7 @@ def run_spectre_simulation(netlist_path, spectre_executable=None,
     output_directory.mkdir(parents=True, exist_ok=True)
 
     executable = spectre_executable or os.environ.get('SPECTRE', 'spectre')
+    _validate_spectre_executable(executable)
     if not ssh_host:
         raise ValueError('SSH host is required for remote Spectre execution')
 
@@ -100,8 +109,8 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
         '-o', 'ControlMaster=auto',
         '-o', f'ControlPath={control_path}',
         '-o', 'ControlPersist=1h',
-        '-o', 'ForwardX11=yes',
-        '-o', 'ForwardX11Trusted=yes',
+        '-o', 'ForwardX11=no',
+        '-o', 'ForwardAgent=no',
         '-o', 'Compression=yes',
     ]
     ssh_options = list(common_options)
@@ -179,7 +188,7 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
         subprocess.run(
             ['ssh', *ssh_options, host, override_command],
             check=True, text=True)
-    LOGGER.info('Input files uploaded; starting remote Spectre')
+    LOGGER.info('Input files uploaded; starting Spectre in batch mode (no GUI)')
 
     include_options = []
     for directory in include_directories:
