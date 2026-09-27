@@ -12,9 +12,27 @@ def normalize_amplitude(amplitude):
     return amplitude / maximum
 
 
+def _padded_limits(*arrays, include_zero=False):
+    values = np.concatenate([
+        np.asarray(array, dtype=float).reshape(-1)
+        for array in arrays
+    ])
+    values = values[np.isfinite(values)]
+    if values.size == 0:
+        return 0.0, 1.0
+    minimum = float(np.min(values))
+    maximum = float(np.max(values))
+    if include_zero:
+        minimum = min(minimum, 0.0)
+        maximum = max(maximum, 0.0)
+    span = maximum - minimum
+    margin = 0.05 * span if span > 0 else max(abs(maximum), 1.0) * 0.05
+    return minimum - margin, maximum + margin
+
+
 def _save_figure(figure, output_path):
     if output_path is not None:
-        figure.savefig(output_path, dpi=150, bbox_inches='tight')
+        figure.savefig(output_path, dpi=300, bbox_inches='tight')
     plt.close(figure)
 
 
@@ -36,8 +54,8 @@ def plot_training_am_am(input_signal, output_signal, output_dir=None):
     plt.title('Normalized AM-AM training response', fontsize=18)
     plt.xlabel('Normalized input amplitude |x_train|', fontsize=14)
     plt.ylabel('Normalized output amplitude |y_train|', fontsize=14)
-    plt.xlim(0, 1.02)
-    plt.ylim(0, 1.02)
+    plt.xlim(*_padded_limits(input_amplitude, curve_input, include_zero=True))
+    plt.ylim(*_padded_limits(output_amplitude, curve_output, include_zero=True))
     plt.grid(True, alpha=0.4)
     plt.legend(fontsize=12)
     plt.tight_layout()
@@ -101,8 +119,9 @@ def plot_static_am_am(pa_model, dpd_model, maximum_input_amplitude,
     plt.xlabel('Normalized input amplitude', fontsize=14)
     plt.ylabel('Output / small-signal linear gain', fontsize=14)
     plt.title('Static AM-AM response with memory settling', fontsize=18)
-    plt.xlim(0, 1.02)
-    plt.ylim(bottom=0)
+    plt.xlim(*_padded_limits(normalized_input, include_zero=True))
+    plt.ylim(*_padded_limits(normalized_pa, normalized_cascade,
+                             include_zero=True))
     plt.grid(True, alpha=0.35)
     plt.legend(fontsize=11)
     plt.tight_layout()

@@ -68,6 +68,41 @@ def calculate_psd(signal, fs):
     return freq, psd_db
 
 
+def _set_data_limits(axis, *arrays, dimension='x', include_zero=False):
+    values = np.concatenate([
+        np.asarray(array, dtype=float).reshape(-1)
+        for array in arrays
+    ])
+    values = values[np.isfinite(values)]
+    if values.size == 0:
+        return
+    minimum = float(np.min(values))
+    maximum = float(np.max(values))
+    if include_zero:
+        minimum = min(minimum, 0.0)
+        maximum = max(maximum, 0.0)
+    span = maximum - minimum
+    margin = 0.05 * span if span > 0 else max(abs(maximum), 1.0) * 0.05
+    setter = axis.set_xlim if dimension == 'x' else axis.set_ylim
+    setter(minimum - margin, maximum + margin)
+
+
+def _occupied_psd_region(*psd_arrays):
+    """Return a mask for the statistically most energetic part of the PSD."""
+    stacked = np.vstack([np.asarray(psd, dtype=float) for psd in psd_arrays])
+    envelope = np.max(stacked, axis=0)
+    finite = np.isfinite(envelope)
+    if not np.any(finite):
+        return np.ones(envelope.shape, dtype=bool)
+
+    # Derive the displayed interval from this run's energy distribution.
+    threshold = np.percentile(envelope[finite], 90.0)
+    mask = finite & (envelope >= threshold)
+    if not np.any(mask):
+        mask = finite
+    return mask
+
+
 def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs,
                         output_dir=None):
     output_dir = Path(output_dir) if output_dir is not None else None
@@ -80,13 +115,19 @@ def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs,
         np.max(psd_no_dpd) if psd_no_dpd.size else -np.inf,
         np.max(psd_with_dpd) if psd_with_dpd.size else -np.inf,
     ])
+    occupied_mask = _occupied_psd_region(
+        psd_in, psd_no_dpd, psd_with_dpd)
+    plot_frequency = freq_in[occupied_mask] / 1e6
+    plot_psd_in = psd_in[occupied_mask] - psd_reference
+    plot_psd_no_dpd = psd_no_dpd[occupied_mask] - psd_reference
+    plot_psd_with_dpd = psd_with_dpd[occupied_mask] - psd_reference
 
     figure = plt.figure(figsize=(10, 7))
-    plt.plot(freq_in / 1e6, psd_in - psd_reference,
+    plt.plot(plot_frequency, plot_psd_in,
              color='black', label='Input signal', linewidth=2.5, zorder=1)
-    plt.plot(freq_with_dpd / 1e6, psd_with_dpd - psd_reference,
+    plt.plot(plot_frequency, plot_psd_with_dpd,
              color='red', label='Output with DPD', linewidth=2.5, zorder=2)
-    plt.plot(freq_no_dpd / 1e6, psd_no_dpd - psd_reference,
+    plt.plot(plot_frequency, plot_psd_no_dpd,
              color='lime', label='Output without DPD', linewidth=2.5, zorder=3)
 
     plt.xlabel('Frequency (MHz)', fontsize=12)
@@ -98,18 +139,29 @@ def plot_psd_comparison(ofdma_signal, out_no_dpd, out_with_dpd, fs,
     legend.get_frame().set_edgecolor('black')
 
     plt.tick_params(axis='both', which='major', labelsize=10)
+    axis = plt.gca()
+    _set_data_limits(
+        axis,
+        plot_frequency,
+    )
+    _set_data_limits(
+        axis,
+        plot_psd_in,
+        plot_psd_no_dpd,
+        plot_psd_with_dpd,
+        dimension='y',
+    )
     plt.tight_layout()
     if output_dir is not None:
         np.savetxt(
             output_dir / 'psd_comparison.csv',
-            np.column_stack((freq_in, psd_in - psd_reference,
-                             psd_no_dpd - psd_reference,
-                             psd_with_dpd - psd_reference)),
+            np.column_stack((freq_in[occupied_mask], plot_psd_in,
+                             plot_psd_no_dpd, plot_psd_with_dpd)),
             delimiter=',',
             header='frequency_hz,input_db,no_dpd_db,with_dpd_db',
             comments='')
         figure.savefig(output_dir / 'psd_comparison.png',
-                       dpi=150, bbox_inches='tight')
+                       dpi=300, bbox_inches='tight')
     plt.close(figure)
 
 

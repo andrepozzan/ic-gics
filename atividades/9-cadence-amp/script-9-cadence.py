@@ -46,6 +46,37 @@ def log_progress(message):
     LOGGER.info(message)
 
 
+def log_experiment_configuration(config):
+    LOGGER.info('========== Experiment configuration ==========')
+    LOGGER.info('RF and sampling:')
+    LOGGER.info('  Carrier frequency       : %.3f GHz',
+                config.carrier_frequency / 1e9)
+    LOGGER.info('  Sampling rate           : %.3f GSa/s',
+                config.sampling_rate / 1e9)
+    LOGGER.info('  Spectre maximum step   : %.3f ps',
+                config.spectre_max_step * 1e12)
+    LOGGER.info('  Baseband bandwidth     : %.3f GHz',
+                config.baseband_bandwidth / 1e9)
+    LOGGER.info('  Startup settling time  : %.3f ns',
+                config.startup_settling_time * 1e9)
+    LOGGER.info('  Input back-off         : %.2f dB',
+                config.input_backoff_db)
+    LOGGER.info('  Input voltage scale    : %.6f',
+                10 ** (-config.input_backoff_db / 20.0))
+    LOGGER.info('OFDMA and modulation:')
+    LOGGER.info('  Number of users        : %d', config.number_of_users)
+    LOGGER.info('  Subcarriers per user   : %d', config.subcarriers_per_user)
+    LOGGER.info('  QAM modulation order   : %d-QAM', config.modulation_order)
+    LOGGER.info('  FFT size               : %d', config.fft_size)
+    LOGGER.info('DPD LUT:')
+    LOGGER.info('  Memory lines           : %d', config.memory_line_count)
+    LOGGER.info('  Selected memory lines  : %d',
+                config.selected_memory_line_count)
+    LOGGER.info('  LUT columns per line   : %s',
+                ', '.join(str(value) for value in config.lut_columns_per_line))
+    LOGGER.info('==============================================')
+
+
 def scale_to_training_range(signal, training_signal):
     reference_amplitude = np.percentile(np.abs(training_signal), 99)
     if reference_amplitude <= 0:
@@ -163,9 +194,7 @@ def main():
         force=True,
     )
     config = ExperimentConfig(data_source=arguments.data_source)
-    LOGGER.info('Input back-off: %.2f dB (linear voltage scale %.6f)',
-                config.input_backoff_db,
-                10 ** (-config.input_backoff_db / 20.0))
+    log_experiment_configuration(config)
     cadence_validation = arguments.cadence_validation
     cadence_netlist = NPORT_NETLIST_PATH if cadence_validation else NETLIST_PATH
     cadence_remote_netlist = None
