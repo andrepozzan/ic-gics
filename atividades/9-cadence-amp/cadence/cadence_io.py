@@ -4,7 +4,7 @@ from pathlib import Path
 import re
 
 import numpy as np
-from scipy.signal import hilbert
+from scipy.signal import butter, hilbert, sosfiltfilt
 
 
 LOGGER = logging.getLogger('cadence_pa.io')
@@ -20,10 +20,16 @@ class TrainingValidationData:
 
 
 def passband_to_complex_baseband(passband_signal, time_vector,
-                                 carrier_frequency):
+                                 carrier_frequency, sampling_rate,
+                                 bandwidth=None):
     analytic_signal = hilbert(passband_signal)
-    return analytic_signal * np.exp(
+    baseband = analytic_signal * np.exp(
         -1j * 2 * np.pi * carrier_frequency * time_vector)
+    if bandwidth is None:
+        return baseband
+    normalized_cutoff = bandwidth / (sampling_rate / 2)
+    sos = butter(6, normalized_cutoff, btype='lowpass', output='sos')
+    return sosfiltfilt(sos, baseband)
     
 def resample_trace(time_vector, signal, sampling_rate, sample_count=None):
     if sample_count is None:
@@ -47,6 +53,12 @@ def read_psfascii_transient(results_directory, input_trace='n_in',
         path for path in Path(results_directory).rglob('*')
         if path.is_file() and path.name not in ('tran.tran.tran', 'envlp.td.envlp')
         and path.suffix not in ('.log', '.out'))
+
+    number_re = re.compile(
+        r'[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?')
+    name_value_re = re.compile(
+        r'"([^"]+)"\s+([-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?)')
+
     for result_file in result_files:
         try:
             text = result_file.read_text(errors='ignore')
@@ -55,23 +67,43 @@ def read_psfascii_transient(results_directory, input_trace='n_in',
         value_section = text.split('VALUE', 1)
         if len(value_section) != 2:
             continue
-        number = r'[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?'
-        row_pattern = re.compile(
-            rf'"time"\s+({number})\s+'
-            rf'"([^"]+)"\s+({number})\s+'
-            rf'"([^"]+)"\s+({number})')
+
         rows = []
-        for time_value, first_name, first_value, second_name, second_value in row_pattern.findall(value_section[1]):
-            values = {
-                first_name: float(first_value),
-                second_name: float(second_value),
-            }
-            if input_trace in values and output_trace in values:
-                rows.append((
-                    float(time_value), values[input_trace], values[output_trace]))
+        current_time = None
+        current_values = {}
+        for line in value_section[1].splitlines():
+            line = line.strip()
+            if not line or line == 'END':
+                continue
+            match = name_value_re.match(line)
+            if not match:
+                continue
+            name, value_str = match.group(1), float(match.group(2))
+            if name == 'time':
+                # Flush previous timestep
+                if current_time is not None and \
+                        input_trace in current_values and \
+                        output_trace in current_values:
+                    rows.append((current_time,
+                                 current_values[input_trace],
+                                 current_values[output_trace]))
+                current_time = value_str
+                current_values = {}
+            else:
+                current_values[name] = value_str
+
+        # Flush the last timestep
+        if current_time is not None and \
+                input_trace in current_values and \
+                output_trace in current_values:
+            rows.append((current_time,
+                         current_values[input_trace],
+                         current_values[output_trace]))
+
         if rows:
             LOGGER.info('Reading Spectre result: %s', result_file)
             return np.asarray(rows, dtype=float).T
+
     raise FileNotFoundError(
         f'Could not find PSF ASCII traces {input_trace} and {output_trace} '
         f'in {results_directory}')

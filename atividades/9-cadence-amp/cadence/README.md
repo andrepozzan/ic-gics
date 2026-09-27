@@ -50,21 +50,27 @@ source ~/cadence/gpdk045/cds
 
 ## Testbench Doherty
 
-O script usa `Sim_Doherty_1.scs`. O netlist exportado pelo Virtuoso esta no servidor em:
+O script usa `Sim_Doherty_1.scs` e o subcircuito personalizado local
+`doherty-amp.scs`. O fluxo envia ambos os arquivos para o diretorio remoto
+antes de cada simulacao; o netlist exportado pelo Virtuoso no servidor nao e
+usado.
 
-```text
-/grad/GRR20243424/cadence/gpdk045/simulacao/doherty-amp.scs
-```
-
-O subcircuito gerado pelo Virtuoso se chama `_sub0` e usa a ordem de terminais:
+O subcircuito se chama `_sub0` e usa a ordem de terminais:
 
 ```text
 RF_IN RF_OUT V_B1 V_B2 V_G1 V_G2
 ```
 
-O testbench usa os bias observados no netlist `SIMUL-amp`: `VDD=3.3 V`, `V_B1=V_B2=2.8 V`, `V_G1=0.65 V` e `V_G2=0.25 V`.
+O testbench usa os bias observados no netlist `SIMUL-amp`: `VDD=3.3 V`, `V_B1=V_B2=2.8 V`, `V_G1=0.65 V` e `V_G2=0.25 V`. A entrada usa `rf_scale=1.0`, pois o script ja normaliza o PWL para a faixa usada no treinamento; aplicar novamente a antiga atenuacao `0.1 * 0.5` causa forte degradacao do BER.
 
-O arquivo `ade_e.scs` auxiliar tambem e enviado automaticamente para `~/simulation`, pois o netlist exportado pelo ADE declara `include "ade_e.scs"`.
+O fluxo usa `fc=26 GHz`, `fs=104 GHz`, `maxstep=1 ps` e
+`strobeperiod=1/fs`. O sinal possui 48 subportadoras contiguas, portanto a
+conversao para banda-base aplica um passa-baixas de 3 GHz depois da demodulacao
+analitica. O prefixo de 1 ns usado pelo script e removido antes do alinhamento,
+evitando treinar com o transiente de carga dos capacitores de bloqueio.
+
+O arquivo `ade_e.scs` auxiliar tambem e enviado automaticamente para
+`~/simulation`.
 
 ## Fluxo Spectre
 

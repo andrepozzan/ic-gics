@@ -24,7 +24,8 @@ def run_spectre_simulation(netlist_path, spectre_executable=None,
                            remote_include_directories=None,
                            remote_netlist_path=None,
                            remote_input_directory=None, max_step=1e-12,
-                           stop_time=None, save_traces=('IN_AMP', 'OUT_AMP')):
+                           stop_time=None, save_traces=('n_in', 'n_out'),
+                           local_include_files=(), strobe_period=None):
     netlist_path = Path(netlist_path).resolve()
     output_directory = Path(
         output_directory or netlist_path.parent / 'spectre_run')
@@ -54,6 +55,8 @@ def run_spectre_simulation(netlist_path, spectre_executable=None,
         max_step,
         stop_time,
         save_traces,
+        local_include_files,
+        strobe_period,
     )
 
 
@@ -62,7 +65,8 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
                         setup_command, input_pwl_path, ssh_key, ssh_port,
                         ssh_control_path, include_directories,
                         remote_netlist_path, remote_input_directory,
-                        max_step, stop_time, save_traces):
+                        max_step, stop_time, save_traces,
+                        local_include_files, strobe_period):
     host = f'{ssh_user}@{ssh_host}' if ssh_user else ssh_host
     remote_dir = _remote_expression(remote_directory)
     input_directory = remote_input_directory or remote_directory
@@ -135,6 +139,16 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
             ['scp', *scp_options, str(netlist_path), remote_target],
             check=True, text=True)
 
+    for include_file in local_include_files:
+        include_path = Path(include_file).resolve()
+        if not include_path.is_file():
+            raise FileNotFoundError(
+                f'Local include file not found: {include_path}')
+        subprocess.run(
+            ['scp', *scp_options, str(include_path),
+             f'{host}:{netlist_workdir}/'],
+            check=True, text=True)
+
     upload_targets = {
         f'{host}:{netlist_workdir}/sinal_entrada_cadence.pwl',
         f'{host}:{remote_dir}/sinal_entrada_cadence.pwl',
@@ -149,6 +163,21 @@ def _run_remote_spectre(netlist_path, output_directory, executable,
         subprocess.run(
             ['scp', *scp_options, str(auxiliary_include),
              f'{host}:{remote_netlist_dir}/ade_e.scs'],
+            check=True, text=True)
+
+    if not remote_netlist_path:
+        stop_expression = f'{stop_time:g}' if stop_time is not None else '20n'
+        strobe_expression = (
+            f' strobeperiod={strobe_period:g}' if strobe_period else '')
+        override_command = (
+            f"sed -i -E "
+            f"'s/^tran[[:space:]]+tran[[:space:]]+stop=[^[:space:]]+"
+            f"[[:space:]]+maxstep=[^[:space:]]+/"
+            f"tran tran stop={stop_expression} maxstep={max_step:g}"
+            f"{strobe_expression}/' "
+            f"{netlist_workdir}/{simulation_netlist_name}")
+        subprocess.run(
+            ['ssh', *ssh_options, host, override_command],
             check=True, text=True)
     LOGGER.info('Input files uploaded; starting remote Spectre')
 

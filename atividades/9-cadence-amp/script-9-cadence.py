@@ -7,6 +7,7 @@ import numpy as np
 BASE_PATH = Path(__file__).parent
 NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Doherty_1.scs'
 NPORT_NETLIST_PATH = BASE_PATH / 'cadence' / 'Sim_Nport_1.scs'
+DOHERTY_SUBCKT_PATH = BASE_PATH / 'cadence' / 'doherty-amp.scs'
 
 from cadence.cadence_runner import run_spectre_simulation
 from cadence.cadence_io import (
@@ -182,7 +183,10 @@ def main():
             remote_input_directory=config.cadence_remote_input_directory,
             max_step=config.spectre_max_step,
             stop_time=len(extraction_passband) / config.sampling_rate,
+            strobe_period=1 / config.sampling_rate,
             save_traces=(cadence_input_trace, cadence_output_trace),
+            local_include_files=(
+                (DOHERTY_SUBCKT_PATH,) if not cadence_validation else ())
         )
         log_progress('Reading first Spectre results')
 
@@ -196,9 +200,11 @@ def main():
             raw_result_time, result_output, config.sampling_rate,
             sample_count=len(extraction_passband))
         input_baseband = passband_to_complex_baseband(
-            result_input, result_time, config.carrier_frequency)
+            result_input, result_time, config.carrier_frequency,
+            config.sampling_rate, config.baseband_bandwidth)
         output_baseband = passband_to_complex_baseband(
-            result_output, result_time, config.carrier_frequency)
+            result_output, result_time, config.carrier_frequency,
+            config.sampling_rate, config.baseband_bandwidth)
         if extraction_guard_samples > 0:
             input_baseband = input_baseband[extraction_guard_samples:]
             output_baseband = output_baseband[extraction_guard_samples:]
@@ -302,7 +308,10 @@ def main():
             remote_input_directory=config.cadence_remote_input_directory,
             max_step=config.spectre_max_step,
             stop_time=len(test_passband_signal) / config.sampling_rate,
+            strobe_period=1 / config.sampling_rate,
             save_traces=(cadence_input_trace, cadence_output_trace),
+            local_include_files=(
+                (DOHERTY_SUBCKT_PATH,) if not cadence_validation else ())
         )
         log_progress('Reading second Spectre results')
         raw_test_time, test_input, test_output = read_psfascii_transient(
@@ -315,7 +324,8 @@ def main():
             raw_test_time, test_output, config.sampling_rate,
             sample_count=len(test_passband_signal))
         amplifier_output = passband_to_complex_baseband(
-            test_output, test_time, config.carrier_frequency)
+            test_output, test_time, config.carrier_frequency,
+            config.sampling_rate, config.baseband_bandwidth)
         if test_guard_samples > 0:
             amplifier_output = amplifier_output[test_guard_samples:]
         log_progress('Real Spectre output loaded')

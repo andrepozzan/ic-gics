@@ -1,0 +1,36 @@
+/home/andrepozzan/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+[INFO] Starting experiment
+[INFO] Generating extraction stimulus
+[INFO] Running first Spectre simulation
+[INFO] Connecting to GRR20243424@analog2
+[INFO] Input files uploaded; starting remote Spectre
+[INFO] Remote Spectre completed; downloading results
+[INFO] Spectre results downloaded: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run
+[INFO] Reading first Spectre results
+[INFO] Reading Spectre result: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run/tran.tran.tran
+[INFO] Training alignment: delay 6.332 samples; gain (2.9756139779227797-0.49936277649008537j)
+[INFO] Loaded 1024 extraction samples
+[INFO] Training variable LUT model
+[INFO] PA model training completed
+[INFO] Selected memory lines: (1, 3, 4); coefficients: 84 -> 36
+[INFO] DPD model training completed
+[INFO] Generating test OFDMA signal
+[INFO] Running second Spectre simulation
+[INFO] Connecting to GRR20243424@analog2
+[INFO] Input files uploaded; starting remote Spectre
+[INFO] Remote Spectre completed; downloading results
+[INFO] Spectre results downloaded: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run
+[INFO] Reading second Spectre results
+[INFO] Reading Spectre result: /home/andrepozzan/programming-development/git-projects/ic-gics/atividades/9-cadence-amp/cadence/spectre_run/tran.tran.tran
+[INFO] Real Spectre output loaded
+[INFO] Calculating BER
+[INFO] Compensation gain: (1.3654015139683733+0.2290052563741114j); estimated delay: 7.629 samples
+[INFO] BER summary (4 users, 96 bits/user)
+[INFO]   User 00: 2.08% (2/96 errors)
+[INFO]   User 01: 10.42% (10/96 errors)
+[INFO]   User 02: 16.67% (16/96 errors)
+[INFO]   User 03: 3.12% (3/96 errors)
+[INFO]   Overall: 8.07% (31/384 errors)
+[INFO] Calculating NMSE and generating plots
+[INFO] Validation NMSE: -22.815834 dB
