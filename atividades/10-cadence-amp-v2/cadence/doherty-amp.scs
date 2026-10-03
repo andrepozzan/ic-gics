@@ -1,0 +1,48 @@
+// Personalized Doherty PA subcircuit for the activity 9 testbench.
+// The testbench and all sources live in Sim_Doherty_1.scs.
+simulator lang=spectre
+
+// Library name: IC-andrepozzan
+// Cell name: doherty-amp
+// View name: schematic
+subckt _sub0 RF_IN RF_OUT V_B1 V_B2 V_G1 V_G2
+    NM3 (net12 V_B1 net19 0) g45n1svt w=(169u) l=45n nf=20 as=14.534p \
+        ad=13.52p ps=189.34u pd=172.2u nrd=473.373u nrs=508.876u sa=140n \
+        sb=140n sd=160n sca=44.73329 scb=0.05021 scc=0.00569 m=(1)
+    NM2 (net19 net17 0 0) g45n1svt w=(169u) l=45n nf=20 as=14.534p \
+        ad=13.52p ps=189.34u pd=172.2u nrd=473.373u nrs=508.876u sa=140n \
+        sb=140n sd=160n sca=44.73329 scb=0.05021 scc=0.00569 m=(1)
+    NM1 (net11 V_B2 net4 0) g45n1svt w=(200u) l=45n nf=20 as=17.2p ad=16p \
+        ps=223.44u pd=203.2u nrd=400u nrs=430u sa=140n sb=140n sd=160n \
+        sca=44.12978 scb=0.04989 scc=0.00563 m=(1)
+    NM0 (net4 net2 0 0) g45n1svt w=(150u) l=45n nf=15 as=12.6p ad=12.6p \
+        ps=162.52u pd=162.52u nrd=560u nrs=560u sa=140n sb=140n sd=160n \
+        sca=44.12978 scb=0.04989 scc=0.00563 m=(1)
+    C18 (net1 0) capacitor c=86.57f
+    C15 (0 net15) capacitor c=86.57f
+    C21 (net13 0) capacitor c=92f
+    C10 (net11 net7) capacitor c=16.9f
+    C17 (net6 0) capacitor c=86.57f
+    C16 (0 net6) capacitor c=86.57f
+    C3 (net15 net17) capacitor c=200p
+    C20 (net7 0) capacitor c=103f
+    C2 (net10 net2) capacitor c=1.22p
+    C1 (net10 0) capacitor c=122.4f
+    C19 (net12 net13) capacitor c=700p
+    C0 (net1 0) capacitor c=122.4f
+    L11 (net13 net7) inductor l=580p r=1p
+    L10 (0 net13) inductor l=300p r=1p
+    L9 (0 net7) inductor l=352.2p r=1p
+    L7 (0 net15) inductor l=151p r=1p
+    L6 (net12 vdd!) inductor l=1.42n r=1p
+    L5 (net11 vdd!) inductor l=1.42n r=1p
+    L4 (0 net10) inductor l=120p r=1p
+    L3 (net1 net10) inductor l=306p r=1p
+    L13 (net6 net1) inductor l=432.8p r=1p
+    L12 (net6 net15) inductor l=432.8p r=1p
+    R2 (net17 V_G1) resistor r=10K
+    R1 (net2 V_G2) resistor r=10K
+    R4 (net15 net1) resistor r=100
+    C4 (RF_IN net6) dcblock c=10p
+    C7 (net7 RF_OUT) dcblock c=10p
+ends _sub0

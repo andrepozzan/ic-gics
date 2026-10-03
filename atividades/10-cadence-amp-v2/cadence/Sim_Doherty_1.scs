@@ -1,0 +1,47 @@
+simulator lang=spectre
+
+// Testbench for the Doherty PA (transistor-level).
+// Includes the local personalized subcircuit and PDK models.
+global 0 vdd!
+include "doherty-amp.scs"
+include "/dados/PDK/GPDK/45/gpdk045_v_6_0/gpdk045/../models/spectre/gpdk045.scs" section=mc
+
+parameters input_file="sinal_entrada_cadence.pwl"
+parameters tstop=25n
+parameters maxstep=1p
+parameters vdd_value=3.3
+parameters v_bias=2.8
+parameters v_gate1=0.65
+parameters v_gate2=0.25
+parameters source_resistance=50
+parameters load_resistance=50
+parameters rf_scale=1.0
+
+// DC supply.
+VDD (vdd! 0) vsource dc=vdd_value type=dc
+
+// Bias sources.
+VBIAS (bias_node 0) vsource dc=v_bias type=dc
+VGATE1 (gate1 0) vsource dc=v_gate1 type=dc
+VGATE2 (gate2 0) vsource dc=v_gate2 type=dc
+
+// RF excitation. The PWL is already normalized to the training range, so
+// do not apply the old wrapper's 0.05 attenuation.
+VIN (n_source 0) vsource type=pwl file=input_file scale=rf_scale
+RSOURCE (n_source n_in) resistor r=source_resistance
+
+// Doherty PA subcircuit instance.
+// Terminal order: RF_IN RF_OUT V_B1 V_B2 V_G1 V_G2
+XDUT (n_in n_out bias_node bias_node gate1 gate2) _sub0
+
+// Output load.
+RLOAD (n_out 0) resistor r=load_resistance
+
+// Transient analysis — overridden by the script at runtime.
+tran tran stop=tstop maxstep=maxstep
+
+// Save only the nodes we need for post-processing.
+save n_in n_out
+
+// Include ADE auxiliary file (empty placeholder for parameter overrides).
+include "ade_e.scs"

@@ -32,6 +32,7 @@ from experiment_plots import (
     plot_raw_static_am_am,
     plot_static_am_am,
     plot_training_am_am,
+    plot_validation_real_comparison,
 )
 from lut_model import LUTLineSelector, VariableLUTModel, create_lut_config
 from ofdma import (
@@ -41,7 +42,6 @@ from ofdma import (
 )
 from plotting import (
     plot_constellation_comparison,
-    plot_am_am,
     plot_psd_comparison,
     plot_time_domain_comparison,
 )
@@ -332,6 +332,7 @@ def main():
     log_progress('DPD model training completed')
     log_progress('Generating test OFDMA signal')
 
+    np.random.seed(7)
     ofdma_signal, transmitted_bits = generate_OFDMA_signal(
         config.fft_size,
         config.number_of_users,
@@ -438,6 +439,10 @@ def main():
 
     plot_training_am_am(input_training, output_training,
                         output_dir=LAST_EXECUTION_DIR)
+    plot_validation_real_comparison(
+        input_validation, output_validation, validation_output,
+        output_dir=LAST_EXECUTION_DIR,
+    )
     plot_raw_am_am(input_training, output_training,
                    output_dir=LAST_EXECUTION_DIR)
     no_dpd_output = selected_model.predict(ofdma_signal)
@@ -448,18 +453,12 @@ def main():
         ofdma_signal, no_dpd_output, dpd_output, plot_output,
         output_dir=LAST_EXECUTION_DIR,
     )
-    plot_am_am(
-        np.abs(ofdma_signal),
-        np.abs(dpd_output),
-        np.abs(no_dpd_output),
-        np.abs(plot_output),
-        output_dir=LAST_EXECUTION_DIR,
-    )
 
+    static_maximum_amplitude = 0.74 * maximum_amplitude
     plot_static_am_am(
         selected_model,
         dpd_model,
-        maximum_amplitude,
+        static_maximum_amplitude,
         selected_model.config.line_count,
         output_dir=LAST_EXECUTION_DIR,
     )

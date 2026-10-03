@@ -1,0 +1,43 @@
+[2026-10-03 15:46:02,473] [INFO] ========== Experiment configuration ==========
+[2026-10-03 15:46:02,474] [INFO] RF and sampling:
+[2026-10-03 15:46:02,474] [INFO]   Carrier frequency       : 26.000 GHz
+[2026-10-03 15:46:02,474] [INFO]   Sampling rate           : 104.000 GSa/s
+[2026-10-03 15:46:02,474] [INFO]   Spectre maximum step   : 1.000 ps
+[2026-10-03 15:46:02,474] [INFO]   Baseband bandwidth     : 3.000 GHz
+[2026-10-03 15:46:02,474] [INFO]   Startup settling time  : 1.000 ns
+[2026-10-03 15:46:02,474] [INFO]   Input back-off         : 6.00 dB
+[2026-10-03 15:46:02,474] [INFO]   Input voltage scale    : 0.501187
+[2026-10-03 15:46:02,474] [INFO] OFDMA and modulation:
+[2026-10-03 15:46:02,474] [INFO]   Number of users        : 10
+[2026-10-03 15:46:02,474] [INFO]   Subcarriers per user   : 24
+[2026-10-03 15:46:02,474] [INFO]   QAM modulation order   : 256-QAM
+[2026-10-03 15:46:02,474] [INFO]   FFT size               : 2048
+[2026-10-03 15:46:02,474] [INFO] DPD LUT:
+[2026-10-03 15:46:02,474] [INFO]   Memory lines           : 5
+[2026-10-03 15:46:02,474] [INFO]   Selected memory lines  : 3
+[2026-10-03 15:46:02,474] [INFO]   LUT columns per line   : 16, 12, 8, 4, 2
+[2026-10-03 15:46:02,474] [INFO] ==============================================
+[2026-10-03 15:46:02,474] [INFO] Starting experiment
+[2026-10-03 15:46:02,499] [INFO] MAT alignment: delay 0.379 samples; gain (330.93670393720737-0.15850621472111387j)
+[2026-10-03 15:46:02,499] [INFO] Training variable LUT model
+[2026-10-03 15:46:05,026] [INFO] PA model training completed
+[2026-10-03 15:46:05,026] [INFO] Selected memory lines: (0, 1, 2); coefficients: 84 -> 72
+[2026-10-03 15:46:06,011] [INFO] DPD model training completed
+[2026-10-03 15:46:06,011] [INFO] Generating test OFDMA signal
+[2026-10-03 15:46:06,025] [INFO] Calculating BER
+[2026-10-03 15:46:06,027] [INFO] Compensation gain: (1.0035945829871717+0.003631891192904857j); estimated delay: 0.020 samples
+[2026-10-03 15:46:06,029] [INFO] BER summary (10 users, 192 bits/user)
+[2026-10-03 15:46:06,029] [INFO]   User 00: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 01: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 02: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 03: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 04: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 05: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 06: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 07: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 08: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   User 09: 0.00% (0/192 errors)
+[2026-10-03 15:46:06,029] [INFO]   Overall: 0.00% (0/1920 errors)
+[2026-10-03 15:46:06,029] [INFO] EVM: 0.3960% (-48.0454 dB), correction gain: (0.0019663369648888415+1.1504901809587114e-20j)
+[2026-10-03 15:46:06,029] [INFO] Calculating NMSE and generating plots
+[2026-10-03 15:46:06,030] [INFO] Validation NMSE: -22.837013 dB

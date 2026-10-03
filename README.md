@@ -52,7 +52,9 @@ Este repositório foi criado para:
 │   ├── 5-modelo-nao-linear-complexo
 │   ├── 6-luts-interpolacao-linear
 │   ├── 7-luts-tamanho-variavel
-│   └── 8-pre-distorcao-com-ofdma
+│   ├── 8-pre-distorcao-com-ofdma
+│   ├── 9-cadence-amp
+│   └── 10-cadence-amp-v2
 ├── certificados
 │   ├── EMICRO-SIM-2026-apresentacao.pdf
 │   ├── EMICRO-SIM-2026-participacao.pdf
@@ -71,10 +73,9 @@ Este repositório foi criado para:
 │   ├── Atividade_7_IC_GICS-andrepozzan.pdf
 │   └── slides-SEMICRO-final-1.pdf
 └── requirements.txt
-
-12 directories, 23 files
-
 ```
+
+A estrutura atual inclui as atividades de modelagem comportamental, otimização com LUTs, pré-distorção com OFDMA e a etapa mais recente de integração com Cadence para simulação de amplificadores de potência.
 
 ---
 
@@ -103,9 +104,9 @@ python3 script.py
 
 ---
 
-## 📄 Relatórios Vinculados
+## 📄 Atividades e Entregas
 
-Cada atividade possui um relatório de entrega, disponíveis para consulta na pasta "relatorios", a seguir segue uma pequena descrição contendo número e titulo de cada um.
+As atividades do repositório seguem uma sequência de desenvolvimento em modelagem comportamental de amplificadores de potência, otimização de parâmetros e validação com sinais complexos e OFDMA. Abaixo estão as principais etapas organizadas no diretório `atividades`.
 
 - 📘 1 - Ajuste Linear via Mínimos Quadrados
 - 📗 2 - Série de Volterra em Amplificadores
@@ -113,13 +114,16 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
 - 📕 4 - Modelo Matemático com Otimização Não Linear
 - 📘 5 - Modelo Matemático com Otimização Não Linear e Números Complexos
 - 📗 6 - Método de Otimização para Sistemas Complexos Usando Lookup Tables e Interpolação Linear
-- 📙 7 - Método de Otimização para Sistemas
-  Complexos Usando Lookup Tables de
-  Tamanho Variável
+- 📙 7 - Método de Otimização para Sistemas Complexos Usando Lookup Tables de Tamanho Variável
+- 📚 8 - Pré-distorção com OFDMA e validação em cenário de comunicação
+- 🔧 9 - Integração com Cadence para modelagem e simulação de PA
+- ⚙️ 10 - Versão aprimorada do fluxo Cadence com validação em ambiente de simulação remota e N-port
+
+> As atividades 8, 9 e 10 representam a etapa mais recente de expansão do repositório, com foco em simulação de amplificadores, OFDMA e integração com o ambiente Cadence.
 
 ---
-## Artigos publicados
 
+## Artigos publicados
 
 ### EMICRO SIM 2026 / UFSM Santa Maria-RS
 
@@ -127,19 +131,18 @@ Cada atividade possui um relatório de entrega, disponíveis para consulta na pa
   EMicro | SIM 2026 - Programação (12/06 - Sessão 6A)
 </a>
 
-
 <a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/artigo-EMICRO_andrepozzan_v05.pdf">Artigo completo</a>
+
 <p align="center">
   <img src="./assets/artigo-emicro-sim-capa.png" alt="Artigo SeMicro" width="500px" 
 </p>
-
-
 
 ### SeMicro-PR 2025 / UFPR Curitiba-PR
 
 Acesse: <a href="https://jpm.ufpr.br/anais/#:~:text=Modelagem comportamental de amplificadores de potência usando polinômios com memória">JPM-Modelagem comportamental de amplificadores de potência usando polinômios com memória</a>
 
 <a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/artigo-semicro2025-andrepozzan2.pdf.pdf">Artigo completo</a>
+
 <p align="center">
   <img src="./assets/semicro.png" alt="Artigo SeMicro" width="500px" 
 </p>
@@ -147,12 +150,10 @@ Acesse: <a href="https://jpm.ufpr.br/anais/#:~:text=Modelagem comportamental de 
   <img src="./assets/slides-semicro.png" alt="Slides SeMicro" width="500px" 
 </p> -->
 
-
-
 <!-- ### Último relatório realizado:
 
 <p align="center">
-  <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="500px" 
+  <img src="./assets/ativ7.png" alt="GICS Logo Branca" width="500px"
 </p> -->
 
 ## 👤 Autor

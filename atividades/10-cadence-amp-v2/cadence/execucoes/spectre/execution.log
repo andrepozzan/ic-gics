@@ -1,0 +1,54 @@
+[2026-10-03 16:14:03,543] [INFO] ========== Experiment configuration ==========
+[2026-10-03 16:14:03,543] [INFO] RF and sampling:
+[2026-10-03 16:14:03,543] [INFO]   Carrier frequency       : 26.000 GHz
+[2026-10-03 16:14:03,543] [INFO]   Sampling rate           : 104.000 GSa/s
+[2026-10-03 16:14:03,543] [INFO]   Spectre maximum step   : 1.000 ps
+[2026-10-03 16:14:03,543] [INFO]   Baseband bandwidth     : 3.000 GHz
+[2026-10-03 16:14:03,543] [INFO]   Startup settling time  : 1.000 ns
+[2026-10-03 16:14:03,543] [INFO]   Input back-off         : 6.00 dB
+[2026-10-03 16:14:03,543] [INFO]   Input voltage scale    : 0.501187
+[2026-10-03 16:14:03,543] [INFO] OFDMA and modulation:
+[2026-10-03 16:14:03,544] [INFO]   Number of users        : 4
+[2026-10-03 16:14:03,544] [INFO]   Subcarriers per user   : 12
+[2026-10-03 16:14:03,544] [INFO]   QAM modulation order   : 64-QAM
+[2026-10-03 16:14:03,544] [INFO]   FFT size               : 2048
+[2026-10-03 16:14:03,544] [INFO] DPD LUT:
+[2026-10-03 16:14:03,544] [INFO]   Memory lines           : 5
+[2026-10-03 16:14:03,544] [INFO]   Selected memory lines  : 3
+[2026-10-03 16:14:03,544] [INFO]   LUT columns per line   : 16, 12, 8, 4, 2
+[2026-10-03 16:14:03,544] [INFO] ==============================================
+[2026-10-03 16:14:03,544] [INFO] Starting experiment
+[2026-10-03 16:14:03,544] [INFO] Generating extraction stimulus
+[2026-10-03 16:14:03,548] [INFO] Running first Spectre simulation
+[2026-10-03 16:14:03,548] [INFO] Connecting to GRR20243424@analog2
+[2026-10-03 16:14:04,953] [INFO] Input files uploaded; starting Spectre in batch mode (no GUI)
+[2026-10-03 16:14:06,557] [INFO] Remote Spectre completed; downloading results
+[2026-10-03 16:14:06,651] [INFO] Spectre results downloaded: /home/andrepozzan/Anotações André/Faculdade/GICS/SE-MICRO-2026/9-cadence-amp/cadence/execucoes/spectre/spectre_run
+[2026-10-03 16:14:06,651] [INFO] Reading first Spectre results
+[2026-10-03 16:14:06,660] [INFO] Reading Spectre result: /home/andrepozzan/Anotações André/Faculdade/GICS/SE-MICRO-2026/9-cadence-amp/cadence/execucoes/spectre/spectre_run/tran.tran.tran
+[2026-10-03 16:14:06,666] [INFO] Training alignment: delay 6.860 samples; gain (3.4377354641206237-0.2308149631033785j)
+[2026-10-03 16:14:06,666] [INFO] Loaded 1024 extraction samples
+[2026-10-03 16:14:06,666] [INFO] Training variable LUT model
+[2026-10-03 16:14:07,405] [INFO] PA model training completed
+[2026-10-03 16:14:07,406] [INFO] Selected memory lines: (0, 3, 4); coefficients: 84 -> 44
+[2026-10-03 16:14:07,490] [INFO] DPD model training completed
+[2026-10-03 16:14:07,490] [INFO] Generating test OFDMA signal
+[2026-10-03 16:14:07,505] [INFO] Running second Spectre simulation
+[2026-10-03 16:14:07,506] [INFO] Connecting to GRR20243424@analog2
+[2026-10-03 16:14:08,032] [INFO] Input files uploaded; starting Spectre in batch mode (no GUI)
+[2026-10-03 16:14:09,548] [INFO] Remote Spectre completed; downloading results
+[2026-10-03 16:14:09,661] [INFO] Spectre results downloaded: /home/andrepozzan/Anotações André/Faculdade/GICS/SE-MICRO-2026/9-cadence-amp/cadence/execucoes/spectre/spectre_run
+[2026-10-03 16:14:09,662] [INFO] Reading second Spectre results
+[2026-10-03 16:14:09,667] [INFO] Reading Spectre result: /home/andrepozzan/Anotações André/Faculdade/GICS/SE-MICRO-2026/9-cadence-amp/cadence/execucoes/spectre/spectre_run/tran.tran.tran
+[2026-10-03 16:14:09,670] [INFO] Real Spectre output loaded
+[2026-10-03 16:14:09,670] [INFO] Calculating BER
+[2026-10-03 16:14:09,671] [INFO] Compensation gain: (1.3990964071334535+0.22655729262567176j); estimated delay: 7.449 samples
+[2026-10-03 16:14:09,671] [INFO] BER summary (4 users, 72 bits/user)
+[2026-10-03 16:14:09,672] [INFO]   User 00: 0.00% (0/72 errors)
+[2026-10-03 16:14:09,672] [INFO]   User 01: 0.00% (0/72 errors)
+[2026-10-03 16:14:09,672] [INFO]   User 02: 0.00% (0/72 errors)
+[2026-10-03 16:14:09,672] [INFO]   User 03: 0.00% (0/72 errors)
+[2026-10-03 16:14:09,672] [INFO]   Overall: 0.00% (0/288 errors)
+[2026-10-03 16:14:09,672] [INFO] EVM: 7.4167% (-22.5958 dB), correction gain: (0.0018305490324632132+0j)
+[2026-10-03 16:14:09,672] [INFO] Calculating NMSE and generating plots
+[2026-10-03 16:14:09,672] [INFO] Validation NMSE: -17.029289 dB

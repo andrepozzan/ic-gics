@@ -45,21 +45,22 @@ def plot_training_am_am(input_signal, output_signal, output_dir=None):
         input_amplitude, output_amplitude)
 
     output_dir = Path(output_dir) if output_dir is not None else None
-    figure = plt.figure(figsize=(10, 7))
-    plt.scatter(input_amplitude, output_amplitude, s=10, alpha=0.12,
+    figure = plt.figure(figsize=(14, 8))
+    plt.scatter(input_amplitude, output_amplitude, s=50, alpha=0.28,
                 color='purple', label='Training samples')
     if len(curve_input) > 0:
-        plt.plot(curve_input, curve_output, color='blue', linewidth=2.8,
+        plt.plot(curve_input, curve_output, color='blue', linewidth=5.0,
                  label='Training static AM-AM (median)')
-    plt.plot([0, 1], [0, 1], 'r--', linewidth=2,
+    plt.plot([0, 1], [0, 1], 'r--', linewidth=3.0,
              label='Linear reference')
-    plt.title('Normalized AM-AM training response', fontsize=18)
-    plt.xlabel('Normalized input amplitude |x_train|', fontsize=14)
-    plt.ylabel('Normalized output amplitude |y_train|', fontsize=14)
+    plt.title('Normalized AM-AM training response', fontsize=36)
+    plt.xlabel('Normalized input amplitude |x_train|', fontsize=30)
+    plt.ylabel('Normalized output amplitude |y_train|', fontsize=30)
     plt.xlim(*_padded_limits(input_amplitude, curve_input, include_zero=True))
     plt.ylim(*_padded_limits(output_amplitude, curve_output, include_zero=True))
     plt.grid(True, alpha=0.4)
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=30, markerscale=2, frameon=True)
+    plt.tick_params(axis='both', which='major', labelsize=25)
     plt.tight_layout()
     if output_dir is not None:
         np.savetxt(output_dir / 'training_am_am.csv',
@@ -70,6 +71,36 @@ def plot_training_am_am(input_signal, output_signal, output_dir=None):
                  if output_dir is not None else None)
 
 
+def plot_validation_real_comparison(in_validation, out_validation,
+                                    out_estimated, output_dir=None):
+    output_dir = Path(output_dir) if output_dir is not None else None
+    figure = plt.figure(figsize=(14, 8))
+    plt.scatter(in_validation.real, out_validation.real,
+                label='Original data', color='blue', s=100)
+    plt.scatter(in_validation.real, out_estimated.real,
+                color='orange', label='Fit', alpha=0.8, s=100)
+    limits = _padded_limits(
+        in_validation.real, out_validation.real, out_estimated.real,
+        include_zero=True,
+    )
+    plt.plot(limits, limits, 'k--', linewidth=2.5,
+             label='Linear reference')
+    plt.xlabel('in_validation (real part)', fontsize=30)
+    plt.ylabel('out_validation (real part)', fontsize=30)
+    plt.title('Original and Estimated Data with Errors', fontsize=36)
+    plt.legend(fontsize=30, markerscale=2)
+    plt.grid()
+    plt.tick_params(axis='both', which='major', labelsize=25)
+    plt.xlim(*limits)
+    plt.ylim(*limits)
+    plt.tight_layout()
+    _save_figure(
+        figure,
+        output_dir / 'validation_real_comparison.png'
+        if output_dir is not None else None,
+    )
+
+
 def plot_raw_am_am(input_signal, output_signal, output_dir=None,
                    tail_percentile=99.0):
     input_amplitude = normalize_amplitude(np.abs(input_signal))
@@ -78,20 +109,21 @@ def plot_raw_am_am(input_signal, output_signal, output_dir=None,
     visible = input_amplitude <= cutoff
 
     output_dir = Path(output_dir) if output_dir is not None else None
-    figure = plt.figure(figsize=(10, 7))
+    figure = plt.figure(figsize=(14, 8))
     plt.scatter(input_amplitude[visible], output_amplitude[visible],
                 s=10, alpha=0.16, color='tab:blue',
                 label='Training samples')
     plt.plot([0, 1], [0, 1], 'r--', linewidth=2,
              label='Linear reference')
     plt.title('Normalized AM-AM response without statistical curve',
-              fontsize=18)
-    plt.xlabel('Normalized input amplitude |x_train|', fontsize=14)
-    plt.ylabel('Normalized output amplitude |y_train|', fontsize=14)
+              fontsize=36)
+    plt.xlabel('Normalized input amplitude |x_train|', fontsize=30)
+    plt.ylabel('Normalized output amplitude |y_train|', fontsize=30)
     plt.xlim(*_padded_limits(input_amplitude[visible], include_zero=True))
     plt.ylim(*_padded_limits(output_amplitude[visible], include_zero=True))
     plt.grid(True, alpha=0.4)
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=30, markerscale=2)
+    plt.tick_params(axis='both', which='major', labelsize=25)
     plt.tight_layout()
     if output_dir is not None:
         np.savetxt(
@@ -145,22 +177,28 @@ def plot_static_am_am(pa_model, dpd_model, maximum_input_amplitude,
     normalized_pa = pa_output / (linear_gain * maximum_input_amplitude)
     normalized_cascade = cascade_output / (linear_gain * maximum_input_amplitude)
 
-    figure = plt.figure(figsize=(10, 7))
-    plt.plot(normalized_input, normalized_pa, 'o-', markersize=3,
-             linewidth=1.5, label='PA without DPD')
-    plt.plot(normalized_input, normalized_cascade, 'o-', markersize=3,
-             linewidth=1.5, label='PA with DPD')
+    figure = plt.figure(figsize=(14, 8))
+    
+    # Curvas com cores definidas, marcadores diferenciados e zorder para visibilidade perfeita
+    plt.plot(normalized_input, normalized_pa, 'o-', color='tab:blue', markersize=10,
+             linewidth=1.5, label='PA without DPD', zorder=2)
+    plt.plot(normalized_input, normalized_cascade, 's-', color='tab:red', markersize=10,
+             linewidth=1.5, label='PA with DPD', zorder=3)
     plt.plot([0, 1], [0, 1], 'k--', linewidth=2,
-             label='Ideal linear response')
-    plt.xlabel('Normalized input amplitude', fontsize=14)
-    plt.ylabel('Output / small-signal linear gain', fontsize=14)
-    plt.title('Static AM-AM response with memory settling', fontsize=18)
+             label='Ideal linear response', zorder=1)
+             
+    plt.xlabel('Normalized input amplitude', fontsize=30)
+    plt.ylabel('Output / small-signal linear gain', fontsize=30)
+    plt.title('Static AM-AM response with memory settling', fontsize=36)
     plt.xlim(*_padded_limits(normalized_input, include_zero=True))
     plt.ylim(*_padded_limits(normalized_pa, normalized_cascade,
                              include_zero=True))
-    plt.grid(True, alpha=0.35)
-    plt.legend(fontsize=11)
+                             
+    plt.grid(True, alpha=0.35, linestyle='--', zorder=0)
+    plt.legend(fontsize=30, markerscale=2, frameon=True)
+    plt.tick_params(axis='both', which='major', labelsize=25)
     plt.tight_layout()
+    
     if output_dir is not None:
         np.savetxt(
             output_dir / 'static_am_am.csv',
@@ -169,9 +207,9 @@ def plot_static_am_am(pa_model, dpd_model, maximum_input_amplitude,
             delimiter=',',
             header='normalized_input,pa_without_dpd,pa_with_dpd',
             comments='')
+            
     _save_figure(figure, output_dir / 'static_am_am.png'
                  if output_dir is not None else None)
-
 
 def plot_raw_static_am_am(input_signal, no_dpd_output, dpd_input,
                           dpd_output, output_dir=None, tail_percentile=99.0):
@@ -209,7 +247,7 @@ def plot_raw_static_am_am(input_signal, no_dpd_output, dpd_input,
         dpd_input_amplitude, tail_percentile)
 
     output_dir = Path(output_dir) if output_dir is not None else None
-    figure = plt.figure(figsize=(10, 7))
+    figure = plt.figure(figsize=(14, 8))
     plt.scatter(
         no_dpd_input_amplitude[no_dpd_visible],
         no_dpd_output_amplitude[no_dpd_visible],
@@ -220,17 +258,18 @@ def plot_raw_static_am_am(input_signal, no_dpd_output, dpd_input,
         dpd_output_amplitude[dpd_visible],
         s=10, alpha=0.16, color='tab:orange', label='PA with DPD',
     )
-    plt.plot([0, 1], [0, 1], 'k--', linewidth=2,
-             label='Ideal linear response')
-    plt.xlabel('Normalized input amplitude', fontsize=14)
-    plt.ylabel('Normalized output amplitude', fontsize=14)
-    plt.title('Raw AM-AM response from OFDMA samples', fontsize=18)
+    plt.plot([0, 1], [0, 1], 'r--', linewidth=2,
+             label='Linear reference')
+    plt.xlabel('Normalized input amplitude', fontsize=30)
+    plt.ylabel('Normalized output amplitude', fontsize=30)
+    plt.title('Raw AM-AM response from OFDMA samples', fontsize=36)
     plt.xlim(0, 1.05)
     plt.ylim(*_padded_limits(
         no_dpd_output_amplitude[no_dpd_visible],
         dpd_output_amplitude[dpd_visible], include_zero=True))
     plt.grid(True, alpha=0.35)
-    plt.legend(fontsize=11)
+    plt.legend(fontsize=30, markerscale=2)
+    plt.tick_params(axis='both', which='major', labelsize=25)
     plt.tight_layout()
     if output_dir is not None:
         np.savetxt(
