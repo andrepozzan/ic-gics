@@ -125,6 +125,12 @@ As atividades do repositório seguem uma sequência de desenvolvimento em modela
 
 ## Artigos publicados
 
+[Slides apresentação 17 SIEPE 2026](https://drive.google.com/file/d/1nS7wZsl3r1WwVpHZIMvxEE5IQDHUIpza/view?usp=drive_link)
+
+[Link Canva Slides 17 SIEPE](https://canva.link/fizlpllutdkq2pb)
+
+
+
 ### EMICRO SIM 2026 / UFSM Santa Maria-RS
 
 <a href="https://sites.google.com/view/emicro-sim-2026/programa%C3%A7%C3%A3o" target="_blank" rel="noopener noreferrer">
