@@ -125,7 +125,7 @@ As atividades do repositório seguem uma sequência de desenvolvimento em modela
 
 ## Artigos publicados
 
-[Slides apresentação 17 SIEPE 2026](https://drive.google.com/file/d/1nS7wZsl3r1WwVpHZIMvxEE5IQDHUIpza/view?usp=drive_link)
+[Slides apresentação 17 SIEPE 2026](https://drive.google.com/drive/folders/1XgfV12cw0wUdfeamwUIVT-_iJORr-A-S?usp=sharing)
 
 [Link Canva Slides 17 SIEPE](https://canva.link/fizlpllutdkq2pb)
 
