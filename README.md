@@ -42,6 +42,7 @@ Este repositório foi criado para:
 │   ├── gics-branco.png
 │   ├── gics-logo.png
 │   ├── logo-ufpr.svg
+│   ├── artigo-semicro-2026-capa.png
 │   ├── semicro.png
 │   └── slides-semicro.png
 ├── atividades
@@ -64,6 +65,7 @@ Este repositório foi criado para:
 │   ├── 6A-24-Andre-Pozzan-Behavioral-Modeling-of-Power-Amplifiers-v2.pdf
 │   ├── artigo-EMICRO_andrepozzan_v05.pdf
 │   ├── artigo-semicro2025-andrepozzan2.pdf.pdf
+│   ├── semicro-2026-andrepozzan_v06.pdf
 │   ├── Atividade_1_IC_GICS.pdf
 │   ├── Atividade_2_IC_GICS.pdf
 │   ├── Atividade_3_IC_GICS.pdf
@@ -124,6 +126,25 @@ As atividades do repositório seguem uma sequência de desenvolvimento em modela
 ---
 
 ## Artigos publicados
+
+
+### SeMicro-PR 2026 / UFPR Curitiba-PR
+
+Apresentado em **6 de novembro de 2026**, na **Sessão 4 – Simulação e modelagem de
+circuitos**, durante a oitava edição dos Seminários de Microeletrônica do Paraná
+(SeMicro-PR), parte da XI Jornada Paranaense de Microeletrônica.
+
+**Behavioral modeling of power amplifiers using complex LUTs for OFDMA signals
+via Cadence Spectre simulation**<br />
+André Corso Pozzan, Eduardo Gonçalves de Lima
+
+<a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/semicro-2026-andrepozzan_v06.pdf">Artigo completo</a>
+
+<p align="center">
+  <img src="./assets/artigo-semicro-2026-capa.png" alt="Artigo SeMicro-PR 2026" width="500px" />
+</p>
+
+### SIEPE 2026
 
 [Slides apresentação 17 SIEPE 2026](https://drive.google.com/drive/folders/1XgfV12cw0wUdfeamwUIVT-_iJORr-A-S?usp=sharing)
 

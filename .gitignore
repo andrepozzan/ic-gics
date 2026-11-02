@@ -6,6 +6,10 @@ spectre_run/
 /spectre_run
 .pwl
 /atividades/9-cadence-amp/cadence/ultima_execucao/
+/atividades/10-cadence-amp-v2/cadence/ultima_execucao/
+*cadence/ultima_execucao/
+*ultima_execucao/
+*ultima_execucao
 .vscode/
 .venv/
 *.vscode

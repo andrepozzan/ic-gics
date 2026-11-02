@@ -56,19 +56,27 @@ def annotate_constellation_labels(ax, symbols, labels, prefix, max_labels=8):
 
 
 def calculate_psd(signal, fs):
-    n_samples = len(signal)
-    if n_samples == 0:
+    """Calculate PSD with the siggen library."""
+    if len(signal) == 0:
         return np.array([]), np.array([])
 
-    window = np.hanning(n_samples)
-    windowed_signal = signal * window
-    spectrum = np.fft.fftshift(np.fft.fft(windowed_signal))
-    freq = np.fft.fftshift(np.fft.fftfreq(n_samples, d=1 / fs))
+    try:
+        import siggen
+    except (ImportError, OSError) as error:
+        raise RuntimeError(
+            'The activity 10 PSD plot requires the siggen library. '
+            'Install a platform-compatible siggen wheel (glibc 2.39+ on Linux).'
+        ) from error
 
-    power_density = (np.abs(spectrum) ** 2) / (np.sum(window ** 2) * fs)
-    psd_db = 10 * np.log10(power_density + 1e-20)
-
-    return freq, psd_db
+    segment = min(1024, len(signal))
+    frequency, power_density = siggen.psd(
+        np.asarray(signal, dtype=np.complex64),
+        float(fs),
+        window='hann',
+        segment=segment,
+    )
+    psd_db = 10 * np.log10(np.maximum(power_density, np.finfo(float).tiny))
+    return frequency, psd_db
 
 
 def _set_data_limits(axis, *arrays, dimension='x', include_zero=False):
