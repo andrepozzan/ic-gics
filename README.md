@@ -55,7 +55,7 @@ Este repositório foi criado para:
 │   ├── 7-luts-tamanho-variavel
 │   ├── 8-pre-distorcao-com-ofdma
 │   ├── 9-cadence-amp
-│   └── 10-cadence-amp-v2
+│   └── 10-cadence-rfweblab
 ├── certificados
 │   ├── EMICRO-SIM-2026-apresentacao.pdf
 │   ├── EMICRO-SIM-2026-participacao.pdf
@@ -119,7 +119,18 @@ As atividades do repositório seguem uma sequência de desenvolvimento em modela
 - 📙 7 - Método de Otimização para Sistemas Complexos Usando Lookup Tables de Tamanho Variável
 - 📚 8 - Pré-distorção com OFDMA e validação em cenário de comunicação
 - 🔧 9 - Integração com Cadence para modelagem e simulação de PA
-- ⚙️ 10 - Versão aprimorada do fluxo Cadence com validação em ambiente de simulação remota e N-port
+- ⚙️ 10 - Integração Cadence, RFWebLab e arquivos MAT para validação de PA
+
+### Documentação da Atividade 10
+
+A Atividade 10 possui três fluxos independentes, documentados separadamente:
+
+- [Cadence/Spectre](./atividades/10-cadence-rfweblab/cadence/README.md)
+- [RFWebLab](./atividades/10-cadence-rfweblab/python/rfweblab/README.md)
+- [Arquivos MAT locais](./atividades/10-cadence-rfweblab/mat/README.md)
+
+O índice geral da atividade está em
+[README.md](./atividades/10-cadence-rfweblab/README.md).
 
 > As atividades 8, 9 e 10 representam a etapa mais recente de expansão do repositório, com foco em simulação de amplificadores, OFDMA e integração com o ambiente Cadence.
 

@@ -7,6 +7,12 @@ spectre_run/
 .pwl
 /atividades/9-cadence-amp/cadence/ultima_execucao/
 /atividades/10-cadence-amp-v2/cadence/ultima_execucao/
+/atividades/10-cadence-amp-v2/cadence/ultima_execucao/*
+/atividades/10-cadence-amp-v2/cadence/ultima_execucao_*/
+/atividades/10-cadence-rfweblab/resultados/
+/atividades/10-cadence-rfweblab/resultados/*
+/atividades/10-cadence-rfweblab/resultados_*/
+**/__pycache__/
 *cadence/ultima_execucao/
 *ultima_execucao/
 *ultima_execucao
