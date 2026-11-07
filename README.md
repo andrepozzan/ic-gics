@@ -65,7 +65,7 @@ Este repositório foi criado para:
 │   ├── 6A-24-Andre-Pozzan-Behavioral-Modeling-of-Power-Amplifiers-v2.pdf
 │   ├── artigo-EMICRO_andrepozzan_v05.pdf
 │   ├── artigo-semicro2025-andrepozzan2.pdf.pdf
-│   ├── semicro-2026-andrepozzan_v06.pdf
+│   ├── semicro-2026-andrepozzan_v07.pdf
 │   ├── Atividade_1_IC_GICS.pdf
 │   ├── Atividade_2_IC_GICS.pdf
 │   ├── Atividade_3_IC_GICS.pdf
@@ -149,7 +149,9 @@ circuitos**, durante a oitava edição dos Seminários de Microeletrônica do Pa
 via Cadence Spectre simulation**<br />
 André Corso Pozzan, Eduardo Gonçalves de Lima
 
-<a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/semicro-2026-andrepozzan_v06.pdf">Artigo completo</a>
+<a href="https://raw.githubusercontent.com/andrepozzan/ic-gics/main/relatorios/semicro-2026-andrepozzan_v07.pdf">Artigo completo</a>
+
+<a href="https://drive.google.com/drive/folders/1-z6m3r9OKnbsho6taP6u9ltoZomf7RB3?usp=drive_link">Slides + artigo</a>
 
 <p align="center">
   <img src="./assets/artigo-semicro-2026-capa.png" alt="Artigo SeMicro-PR 2026" width="500px" />

@@ -206,6 +206,13 @@ def _split_symbols_by_user(symbols, bits_by_user, mod_order):
     return result
 
 
+def _constellation_axis_limit(mod_order):
+    """Return one symmetric axis limit for every constellation plot."""
+    levels_per_axis = int(np.sqrt(mod_order))
+    maximum_level = levels_per_axis - 1
+    return 1.2 * maximum_level if maximum_level > 0 else 1.0
+
+
 def plot_constellation_comparison(bits_send, bits_received, mod_order,
                                   measured_symbols=None, max_labels=8,
                                   output_dir=None):
@@ -235,12 +242,8 @@ def plot_constellation_comparison(bits_send, bits_received, mod_order,
         ax.axvline(0, color='gray', linewidth=0.8)
         ax.grid(True, alpha=0.3)
 
-        user_points = np.concatenate([tx_symbols, rx_symbols])
-        axis_limit = 1.2 * np.max(np.abs(np.concatenate([user_points.real, user_points.imag])))
-        if axis_limit == 0:
-            axis_limit = 1.0
-
         ax.set_aspect('equal', adjustable='box')
+        axis_limit = _constellation_axis_limit(mod_order)
         ax.set_xlim(-axis_limit, axis_limit)
         ax.set_ylim(-axis_limit, axis_limit)
         ax.set_xlabel('I', fontsize=30)
@@ -260,31 +263,36 @@ def plot_constellation_comparison(bits_send, bits_received, mod_order,
 
 def plot_constellation_all_users(bits_send, bits_received, mod_order,
                                  measured_symbols=None, output_dir=None):
-    """Plot all demodulated symbols together, without user-specific colors."""
+    """Plot the same ideal and demodulated symbols joined across users."""
     output_dir = Path(output_dir) if output_dir is not None else None
     figure, axis = plt.subplots(figsize=(11, 11))
-    measured_by_user = (
-        _split_symbols_by_user(measured_symbols, bits_send, mod_order)
-        if measured_symbols is not None else [
-            qam_mod(bits, mod_order) for bits in bits_received
-        ]
+    all_transmitted = [qam_mod(bits, mod_order) for bits in bits_send]
+    all_received = [qam_mod(bits, mod_order) for bits in bits_received]
+    transmitted_symbols = (
+        np.concatenate(all_transmitted)
+        if all_transmitted else np.array([], dtype=complex)
     )
-    all_received = (
-        np.concatenate(measured_by_user)
-        if measured_by_user else np.array([], dtype=complex)
+    received_symbols = (
+        np.concatenate(all_received)
+        if all_received else np.array([], dtype=complex)
     )
-    if not len(all_received):
+    if not len(transmitted_symbols) and not len(received_symbols):
         return
-    axis.scatter(
-        all_received.real, all_received.imag, s=110, alpha=1,
-        color='#1769aa', edgecolors='white', linewidths=0.35,
-        label='Símbolos demodulados', zorder=2,
-    )
-    axis_limit = 1.15 * np.max(np.abs(np.concatenate([
-        all_received.real, all_received.imag,
-    ])))
-    if axis_limit == 0:
-        axis_limit = 1.0
+
+    if len(transmitted_symbols):
+        axis.scatter(
+            transmitted_symbols.real, transmitted_symbols.imag, s=110,
+            alpha=0.85, marker='o', facecolors='none',
+            edgecolors='#1769aa', linewidths=1.2,
+            label='Pontos ideais (TX)', zorder=3,
+        )
+    if len(received_symbols):
+        axis.scatter(
+            received_symbols.real, received_symbols.imag, s=55, alpha=0.9,
+            marker='o', color='#e53935', edgecolors='white',
+            linewidths=0.35, label='Pontos demodulados (RX)', zorder=2,
+        )
+    axis_limit = _constellation_axis_limit(mod_order)
     axis.set_xlim(-axis_limit, axis_limit)
     axis.set_ylim(-axis_limit, axis_limit)
     axis.set_aspect('equal', adjustable='box')
